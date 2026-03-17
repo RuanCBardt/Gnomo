@@ -49,14 +49,14 @@
         </span>
         <!-- Balance -->
         <span :class="[
-          'text-sm font-semibold tabular-nums',
+          'text-sm font-semibold tabular-nums text-right w-32',
           balance >= 0 ? 'text-[#22c55e]' : 'text-[#ef4444]'
         ]">
           {{ formatCurrency(balance, defaultCurrency) }}
         </span>
 
         <!-- Actions -->
-        <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <div class="w-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <button
             v-if="canDelete"
             @click.stop="handleDelete"
@@ -114,7 +114,7 @@ const expanded = ref(false)
 
 watch(() => props.expandGeneration, () => {
   expanded.value = !!props.forceExpanded
-})
+}, { immediate: true })
 
 const children = computed(() =>
   [...accountStore.getChildren(props.account.id)].sort((a, b) =>
