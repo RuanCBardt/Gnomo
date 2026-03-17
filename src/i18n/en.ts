@@ -154,6 +154,7 @@ export const en: TranslationKeys = {
     viewPie: 'Pie',
     viewBar: 'Bar',
     noData: 'No data to display',
+    profitAndLoss: 'Profit & Loss',
   },
 
   // Settings

@@ -79,6 +79,49 @@
       :empty-text="t.reports.noData"
     />
 
+    <!-- PROFIT & LOSS special view -->
+    <template v-if="activeTab === 'pnl'">
+      <!-- P&L Equation -->
+      <div class="bg-[#12121a] border border-[#2a2a4a]/60 rounded-2xl p-6">
+        <div class="flex items-center justify-center gap-6 text-center flex-wrap">
+          <div>
+            <p class="text-xs text-[#6a6a8a] mb-1">{{ t.reports.income }}</p>
+            <p class="text-xl font-bold text-[#22c55e]">{{ formatCurrency(totalIncome, ui.defaultCurrency) }}</p>
+          </div>
+          <span class="text-2xl text-[#6a6a8a]">−</span>
+          <div>
+            <p class="text-xs text-[#6a6a8a] mb-1">{{ t.reports.expenses }}</p>
+            <p class="text-xl font-bold text-[#f59e0b]">{{ formatCurrency(totalExpenses, ui.defaultCurrency) }}</p>
+          </div>
+          <span class="text-2xl text-[#6a6a8a]">=</span>
+          <div>
+            <p class="text-xs text-[#6a6a8a] mb-1">{{ profitLoss >= 0 ? t.reports.profit : t.reports.loss }}</p>
+            <p :class="['text-2xl font-bold', profitLoss >= 0 ? 'text-[#22c55e]' : 'text-[#ef4444]']">
+              {{ formatCurrency(Math.abs(profitLoss), ui.defaultCurrency) }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Income breakdown -->
+      <ReportPanel
+        :title="t.reports.incomeReport"
+        :items="incomeItems"
+        accent-color="#22c55e"
+        :currency="ui.defaultCurrency"
+        :empty-text="t.reports.noData"
+      />
+
+      <!-- Expenses breakdown -->
+      <ReportPanel
+        :title="t.reports.expensesReport"
+        :items="expenseItems"
+        accent-color="#f59e0b"
+        :currency="ui.defaultCurrency"
+        :empty-text="t.reports.noData"
+      />
+    </template>
+
     <!-- NET WORTH special view -->
     <template v-if="activeTab === 'networth'">
       <!-- Net Worth Equation -->
@@ -136,6 +179,7 @@ import {
   TrendingDown,
   Wallet,
   Scale,
+  Receipt,
 } from 'lucide-vue-next'
 import ReportPanel from '@/components/reports/ReportPanel.vue'
 import type { ReportItem } from '@/components/reports/ReportPanel.vue'
@@ -144,12 +188,13 @@ const accountStore = useAccountStore()
 const ui = useUIStore()
 const { t } = useI18n()
 
-const activeTab = ref<'income' | 'expenses' | 'assets' | 'networth'>('expenses')
+const activeTab = ref<'income' | 'expenses' | 'assets' | 'pnl' | 'networth'>('expenses')
 
 const tabs = computed(() => [
   { value: 'income' as const, label: t.value.reports.incomeReport, icon: TrendingUp, color: '#22c55e' },
   { value: 'expenses' as const, label: t.value.reports.expensesReport, icon: TrendingDown, color: '#f59e0b' },
   { value: 'assets' as const, label: t.value.reports.assetsReport, icon: Wallet, color: '#3b82f6' },
+  { value: 'pnl' as const, label: t.value.reports.profitAndLoss, icon: Receipt, color: '#ec4899' },
   { value: 'networth' as const, label: t.value.reports.netWorth, icon: Scale, color: '#7c5cfc' },
 ])
 
@@ -186,6 +231,7 @@ const totalLiabilities = computed(() => accountStore.getAccountBalance('root-lia
 const totalIncome = computed(() => accountStore.getAccountBalance('root-income'))
 const totalExpenses = computed(() => accountStore.getAccountBalance('root-expense'))
 const netWorth = computed(() => totalAssets.value - totalLiabilities.value)
+const profitLoss = computed(() => totalIncome.value - totalExpenses.value)
 
 const summaryCards = computed(() => [
   { label: t.value.reports.totalIncome, value: totalIncome.value, icon: TrendingUp, color: '#22c55e' },

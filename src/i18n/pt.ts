@@ -152,6 +152,7 @@ export const pt = {
     viewPie: 'Pizza',
     viewBar: 'Barras',
     noData: 'Nenhum dado para exibir',
+    profitAndLoss: 'Lucros e Perdas',
   },
 
   // Settings
