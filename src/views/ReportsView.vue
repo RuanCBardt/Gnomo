@@ -1,77 +1,196 @@
 <template>
   <div class="space-y-6">
+    <!-- Header -->
     <div>
-      <h1 class="text-2xl font-bold text-[#e8e8f0]">Relatórios</h1>
-      <p class="text-sm text-[#6a6a8a] mt-0.5">Análises financeiras e demonstrações contábeis</p>
+      <h1 class="text-2xl font-bold text-[#e8e8f0]">{{ t.reports.title }}</h1>
+      <p class="text-sm text-[#6a6a8a] mt-0.5">{{ t.reports.subtitle }}</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <router-link
-        v-for="report in reports"
-        :key="report.to"
-        :to="report.to"
+    <!-- Report Tabs -->
+    <div class="flex gap-2 flex-wrap">
+      <button
+        v-for="tab in tabs"
+        :key="tab.value"
+        @click="activeTab = tab.value"
         :class="[
-          'group relative overflow-hidden rounded-2xl border border-[#2a2a4a]/60 bg-[#12121a] p-6',
-          'transition-all duration-300 hover:border-[#2a2a4a] hover:shadow-lg hover:shadow-black/20 hover:-translate-y-1',
+          'flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
+          activeTab === tab.value
+            ? 'shadow-sm'
+            : 'text-[#6a6a8a] hover:text-[#a0a0c0] hover:bg-[#1a1a2e]'
         ]"
+        :style="activeTab === tab.value ? {
+          backgroundColor: tab.color + '15',
+          color: tab.color,
+          boxShadow: `0 2px 8px ${tab.color}15`,
+        } : {}"
       >
-        <!-- Glow -->
-        <div
-          class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-          :style="{ background: `radial-gradient(ellipse at 50% 0%, ${report.color}15, transparent 70%)` }"
-        ></div>
-
-        <div class="relative">
-          <div
-            class="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110"
-            :style="{ backgroundColor: report.color + '15' }"
-          >
-            <component :is="report.icon" class="w-6 h-6" :style="{ color: report.color }" />
-          </div>
-          <h3 class="text-lg font-semibold text-[#e8e8f0] mb-1">{{ report.label }}</h3>
-          <p class="text-sm text-[#6a6a8a]">{{ report.description }}</p>
-        </div>
-
-        <div class="absolute bottom-0 left-0 right-0 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          :style="{ background: `linear-gradient(90deg, transparent, ${report.color}40, transparent)` }"
-        ></div>
-      </router-link>
+        <component :is="tab.icon" class="w-4 h-4" />
+        {{ tab.label }}
+      </button>
     </div>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div
+        v-for="card in summaryCards"
+        :key="card.label"
+        class="bg-[#12121a] border border-[#2a2a4a]/60 rounded-2xl p-5 transition-all duration-300 hover:border-[#2a2a4a]"
+      >
+        <div class="flex items-center gap-2 mb-2">
+          <div
+            class="w-8 h-8 rounded-lg flex items-center justify-center"
+            :style="{ backgroundColor: card.color + '15' }"
+          >
+            <component :is="card.icon" class="w-4 h-4" :style="{ color: card.color }" />
+          </div>
+          <span class="text-xs text-[#6a6a8a]">{{ card.label }}</span>
+        </div>
+        <p class="text-lg font-bold tabular-nums" :style="{ color: card.color }">
+          {{ formatCurrency(card.value, ui.defaultCurrency) }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Active Report Panel -->
+    <ReportPanel
+      v-if="activeTab === 'income'"
+      :title="t.reports.incomeReport"
+      :items="incomeItems"
+      accent-color="#22c55e"
+      :currency="ui.defaultCurrency"
+      :empty-text="t.reports.noData"
+    />
+
+    <ReportPanel
+      v-if="activeTab === 'expenses'"
+      :title="t.reports.expensesReport"
+      :items="expenseItems"
+      accent-color="#f59e0b"
+      :currency="ui.defaultCurrency"
+      :empty-text="t.reports.noData"
+    />
+
+    <ReportPanel
+      v-if="activeTab === 'assets'"
+      :title="t.reports.assetsReport"
+      :items="assetItems"
+      accent-color="#22c55e"
+      :currency="ui.defaultCurrency"
+      :empty-text="t.reports.noData"
+    />
+
+    <!-- NET WORTH special view -->
+    <template v-if="activeTab === 'networth'">
+      <!-- Net Worth Equation -->
+      <div class="bg-[#12121a] border border-[#2a2a4a]/60 rounded-2xl p-6">
+        <div class="flex items-center justify-center gap-6 text-center flex-wrap">
+          <div>
+            <p class="text-xs text-[#6a6a8a] mb-1">{{ t.reports.assets }}</p>
+            <p class="text-xl font-bold text-[#22c55e]">{{ formatCurrency(totalAssets, ui.defaultCurrency) }}</p>
+          </div>
+          <span class="text-2xl text-[#6a6a8a]">−</span>
+          <div>
+            <p class="text-xs text-[#6a6a8a] mb-1">{{ t.reports.liabilities }}</p>
+            <p class="text-xl font-bold text-[#ef4444]">{{ formatCurrency(totalLiabilities, ui.defaultCurrency) }}</p>
+          </div>
+          <span class="text-2xl text-[#6a6a8a]">=</span>
+          <div>
+            <p class="text-xs text-[#6a6a8a] mb-1">{{ t.reports.netWorth }}</p>
+            <p :class="['text-2xl font-bold', netWorth >= 0 ? 'text-[#7c5cfc]' : 'text-[#ef4444]']">
+              {{ formatCurrency(netWorth, ui.defaultCurrency) }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assets breakdown -->
+      <ReportPanel
+        :title="t.reports.assetsReport"
+        :items="assetItems"
+        accent-color="#22c55e"
+        :currency="ui.defaultCurrency"
+        :empty-text="t.reports.noData"
+      />
+
+      <!-- Liabilities breakdown -->
+      <ReportPanel
+        :title="t.reports.liabilitiesReport"
+        :items="liabilityItems"
+        accent-color="#ef4444"
+        :currency="ui.defaultCurrency"
+        :empty-text="t.reports.noData"
+      />
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import {
-  Scale,
-  TrendingUp,
-  PieChart,
-} from 'lucide-vue-next'
+import { ref, computed } from 'vue'
+import { useAccountStore } from '@/stores/accounts'
+import { useUIStore } from '@/stores/ui'
+import { formatCurrency } from '@/utils/accounting'
 import { useI18n } from '@/i18n'
+import type { AccountType } from '@/types'
+import {
+  TrendingUp,
+  TrendingDown,
+  Wallet,
+  Scale,
+} from 'lucide-vue-next'
+import ReportPanel from '@/components/reports/ReportPanel.vue'
+import type { ReportItem } from '@/components/reports/ReportPanel.vue'
 
+const accountStore = useAccountStore()
+const ui = useUIStore()
 const { t } = useI18n()
 
-const reports = computed(() => [
-  {
-    to: '/reports/balance-sheet',
-    label: t.value.reports.balanceSheet,
-    description: t.value.reports.balanceSheetDesc,
-    icon: Scale,
-    color: '#7c5cfc',
-  },
-  {
-    to: '/reports/income-statement',
-    label: t.value.reports.incomeStatement,
-    description: t.value.reports.incomeStatementDesc,
-    icon: TrendingUp,
-    color: '#22c55e',
-  },
-  {
-    to: '/reports',
-    label: t.value.reports.cashFlow,
-    description: t.value.reports.cashFlowDesc,
-    icon: PieChart,
-    color: '#f59e0b',
-  },
+const activeTab = ref<'income' | 'expenses' | 'assets' | 'networth'>('expenses')
+
+const tabs = computed(() => [
+  { value: 'income' as const, label: t.value.reports.incomeReport, icon: TrendingUp, color: '#22c55e' },
+  { value: 'expenses' as const, label: t.value.reports.expensesReport, icon: TrendingDown, color: '#f59e0b' },
+  { value: 'assets' as const, label: t.value.reports.assetsReport, icon: Wallet, color: '#3b82f6' },
+  { value: 'networth' as const, label: t.value.reports.netWorth, icon: Scale, color: '#7c5cfc' },
+])
+
+// Data helpers
+function getLeafBalances(type: AccountType): ReportItem[] {
+  const typeLabels: Partial<Record<AccountType, string>> = {
+    asset: t.value.accountTypes.asset,
+    liability: t.value.accountTypes.liability,
+    equity: t.value.accountTypes.equity,
+    income: t.value.accountTypes.income,
+    expense: t.value.accountTypes.expense,
+  }
+  const accounts = accountStore.getAccountsByType(type)
+  const items: ReportItem[] = []
+  for (const acc of accounts) {
+    const balance = accountStore.getAccountBalance(acc.id)
+    if (Math.abs(balance) > 0.01) {
+      items.push({
+        name: accountStore.getDisplayName(acc, typeLabels),
+        value: Math.abs(balance),
+      })
+    }
+  }
+  return items
+}
+
+const incomeItems = computed(() => getLeafBalances('income'))
+const expenseItems = computed(() => getLeafBalances('expense'))
+const assetItems = computed(() => getLeafBalances('asset'))
+const liabilityItems = computed(() => getLeafBalances('liability'))
+
+const totalAssets = computed(() => accountStore.getAccountBalance('root-asset'))
+const totalLiabilities = computed(() => accountStore.getAccountBalance('root-liability'))
+const totalIncome = computed(() => accountStore.getAccountBalance('root-income'))
+const totalExpenses = computed(() => accountStore.getAccountBalance('root-expense'))
+const netWorth = computed(() => totalAssets.value - totalLiabilities.value)
+
+const summaryCards = computed(() => [
+  { label: t.value.reports.totalIncome, value: totalIncome.value, icon: TrendingUp, color: '#22c55e' },
+  { label: t.value.reports.totalExpenses, value: totalExpenses.value, icon: TrendingDown, color: '#f59e0b' },
+  { label: t.value.reports.totalAssets, value: totalAssets.value, icon: Wallet, color: '#3b82f6' },
+  { label: t.value.reports.netWorth, value: netWorth.value, icon: Scale, color: '#7c5cfc' },
 ])
 </script>

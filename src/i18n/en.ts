@@ -142,6 +142,18 @@ export const en: TranslationKeys = {
     expenses: 'EXPENSES',
     profit: 'PROFIT',
     loss: 'LOSS',
+    incomeReport: 'Income',
+    expensesReport: 'Expenses',
+    assetsReport: 'Assets',
+    liabilitiesReport: 'Liabilities',
+    netWorth: 'Net Worth',
+    totalIncome: 'Total Income',
+    totalExpenses: 'Total Expenses',
+    totalAssets: 'Total Assets',
+    viewList: 'List',
+    viewPie: 'Pie',
+    viewBar: 'Bar',
+    noData: 'No data to display',
   },
 
   // Settings

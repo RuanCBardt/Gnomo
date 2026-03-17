@@ -24,16 +24,6 @@ const router = createRouter({
       component: () => import('@/views/ReportsView.vue'),
     },
     {
-      path: '/reports/balance-sheet',
-      name: 'balance-sheet',
-      component: () => import('@/views/BalanceSheetView.vue'),
-    },
-    {
-      path: '/reports/income-statement',
-      name: 'income-statement',
-      component: () => import('@/views/IncomeStatementView.vue'),
-    },
-    {
       path: '/settings',
       name: 'settings',
       component: () => import('@/views/SettingsView.vue'),

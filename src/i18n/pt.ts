@@ -140,6 +140,18 @@ export const pt = {
     expenses: 'DESPESAS',
     profit: 'LUCRO',
     loss: 'PREJUÍZO',
+    incomeReport: 'Receitas',
+    expensesReport: 'Despesas',
+    assetsReport: 'Ativos',
+    liabilitiesReport: 'Passivos',
+    netWorth: 'Patrimônio Líquido',
+    totalIncome: 'Total Receitas',
+    totalExpenses: 'Total Despesas',
+    totalAssets: 'Total Ativos',
+    viewList: 'Lista',
+    viewPie: 'Pizza',
+    viewBar: 'Barras',
+    noData: 'Nenhum dado para exibir',
   },
 
   // Settings
