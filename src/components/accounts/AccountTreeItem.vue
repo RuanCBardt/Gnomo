@@ -110,7 +110,7 @@ const emit = defineEmits<{
 
 const accountStore = useAccountStore()
 const { defaultCurrency } = useUIStore()
-const expanded = ref(props.depth < 2) // Auto-expand root + second level
+const expanded = ref(false)
 
 watch(() => props.expandGeneration, () => {
   expanded.value = !!props.forceExpanded
