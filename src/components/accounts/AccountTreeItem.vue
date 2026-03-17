@@ -10,7 +10,7 @@
     >
       <div class="flex items-center gap-3">
         <!-- Expand arrow -->
-        <div class="w-5 flex items-center justify-center">
+        <div class="w-5 flex items-center justify-center" @click.stop="toggleExpand">
           <ChevronRight
             v-if="hasChildren"
             :class="[
@@ -77,6 +77,7 @@
           :key="child.id"
           :account="child"
           :depth="depth + 1"
+          :force-expanded="props.forceExpanded"
           @open-ledger="(acc: Account) => emit('open-ledger', acc)"
         />
       </div>
@@ -85,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useAccountStore } from '@/stores/accounts'
 import { useUIStore } from '@/stores/ui'
 import { formatCurrency } from '@/utils/accounting'
@@ -99,6 +100,7 @@ const { t } = useI18n()
 const props = defineProps<{
   account: Account
   depth: number
+  forceExpanded?: boolean | null
 }>()
 
 const emit = defineEmits<{
@@ -108,6 +110,12 @@ const emit = defineEmits<{
 const accountStore = useAccountStore()
 const { defaultCurrency } = useUIStore()
 const expanded = ref(props.depth < 2) // Auto-expand root + second level
+
+watch(() => props.forceExpanded, (val) => {
+  if (val !== null && val !== undefined) {
+    expanded.value = val
+  }
+})
 
 const children = computed(() => accountStore.getChildren(props.account.id))
 const hasChildren = computed(() => children.value.length > 0)
@@ -123,12 +131,17 @@ const typeLabels = computed<Partial<Record<AccountType, string>>>(() => ({
 }))
 const displayName = computed(() => accountStore.getDisplayName(props.account, typeLabels.value))
 
-function handleClick() {
+function toggleExpand() {
   if (hasChildren.value) {
     expanded.value = !expanded.value
   }
+}
+
+function handleClick() {
   if (!props.account.placeholder) {
     emit('open-ledger', props.account)
+  } else if (hasChildren.value) {
+    expanded.value = !expanded.value
   }
 }
 

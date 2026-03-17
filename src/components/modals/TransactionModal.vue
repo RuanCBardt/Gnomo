@@ -422,11 +422,15 @@ watch(() => ui.transactionModalOpen, (open) => {
       }
     }
     // Reset form
+    const destEntry = newEntry()
+    if (ui.prefillDestinationAccountId) {
+      destEntry.accountId = ui.prefillDestinationAccountId
+    }
     form.value = {
       date: today(),
       description: '',
       sources: [newEntry()],
-      destinations: [newEntry()],
+      destinations: [destEntry],
     }
     simpleAmountStr.value = ''
   }

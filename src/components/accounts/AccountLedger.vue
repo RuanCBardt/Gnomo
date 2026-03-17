@@ -24,6 +24,16 @@
                 </p>
               </div>
               <button
+                @click="createTransaction"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold
+                       bg-gradient-to-r from-[#7c5cfc] to-[#5c8cfc] text-white
+                       hover:shadow-lg hover:shadow-[#7c5cfc]/30 hover:scale-[1.02]
+                       active:scale-[0.98] transition-all duration-200"
+              >
+                <Plus class="w-3.5 h-3.5" />
+                {{ t.tx.newTransaction }}
+              </button>
+              <button
                 @click="$emit('close')"
                 class="p-1.5 rounded-lg text-[#6a6a8a] hover:text-[#e8e8f0] hover:bg-[#1a1a2e] transition-all duration-200"
               >
@@ -115,7 +125,7 @@ import { useUIStore } from '@/stores/ui'
 import { formatCurrency, formatDate } from '@/utils/accounting'
 import { ACCOUNT_TYPE_COLORS, isDebitPositive } from '@/types'
 import type { Account, AccountType, Transaction } from '@/types'
-import { X, BookOpen } from 'lucide-vue-next'
+import { X, BookOpen, Plus } from 'lucide-vue-next'
 import { useI18n } from '@/i18n'
 
 const { t } = useI18n()
@@ -234,5 +244,10 @@ function getRowRate(row: LedgerRow): string {
 function editTransaction(txId: string) {
   emit('close')
   ui.openTransactionModal(txId)
+}
+
+function createTransaction() {
+  emit('close')
+  ui.openTransactionModal(undefined, props.account?.id)
 }
 </script>

@@ -6,6 +6,7 @@ export const useUIStore = defineStore('ui', () => {
   const sidebarCollapsed = ref(false)
   const transactionModalOpen = ref(false)
   const editingTransactionId = ref<string | null>(null)
+  const prefillDestinationAccountId = ref<string | null>(null)
   const searchQuery = ref('')
   const defaultCurrency = ref('GBP')
   const language = ref<Locale>('en')
@@ -40,14 +41,16 @@ export const useUIStore = defineStore('ui', () => {
     sidebarCollapsed.value = !sidebarCollapsed.value
   }
 
-  function openTransactionModal(transactionId?: string) {
+  function openTransactionModal(transactionId?: string, destinationAccountId?: string) {
     editingTransactionId.value = transactionId ?? null
+    prefillDestinationAccountId.value = destinationAccountId ?? null
     transactionModalOpen.value = true
   }
 
   function closeTransactionModal() {
     transactionModalOpen.value = false
     editingTransactionId.value = null
+    prefillDestinationAccountId.value = null
   }
 
   initSettings()
@@ -56,6 +59,7 @@ export const useUIStore = defineStore('ui', () => {
     sidebarCollapsed,
     transactionModalOpen,
     editingTransactionId,
+    prefillDestinationAccountId,
     searchQuery,
     defaultCurrency,
     language,

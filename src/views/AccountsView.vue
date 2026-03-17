@@ -23,7 +23,7 @@
       <button
         v-for="tab in tabs"
         :key="tab.value"
-        @click="activeTab = tab.value"
+        @click="handleTabClick(tab.value)"
         :class="[
           'px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200',
           activeTab === tab.value
@@ -43,6 +43,7 @@
           :key="acc.id"
           :account="acc"
           :depth="0"
+          :force-expanded="forceExpanded"
           @open-ledger="openLedger"
         />
       </div>
@@ -152,6 +153,20 @@ const { t } = useI18n()
 const activeTab = ref<AccountType | 'all'>('all')
 const showAddModal = ref(false)
 const ledgerAccount = ref<Account | null>(null)
+const forceExpanded = ref<boolean | null>(null)
+
+function handleTabClick(tab: AccountType | 'all') {
+  if (activeTab.value === tab) {
+    // Same tab clicked again: toggle expand all
+    forceExpanded.value = forceExpanded.value === true ? false : true
+  } else {
+    // Different tab: collapse all
+    activeTab.value = tab
+    forceExpanded.value = false
+  }
+  // Reset after Vue processes the change so future manual toggles work
+  setTimeout(() => { forceExpanded.value = null }, 50)
+}
 
 function openLedger(account: Account) {
   ledgerAccount.value = account
