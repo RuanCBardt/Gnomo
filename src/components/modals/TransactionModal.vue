@@ -1,21 +1,107 @@
 <template>
   <Teleport to="body">
     <transition name="fade">
-      <div v-if="ui.transactionModalOpen" class="fixed inset-0 z-[60] flex items-center p-4" :class="ui.prefillDestinationAccountId ? 'justify-center items-end pb-4' : 'justify-center'">
+      <div v-if="ui.transactionModalOpen" class="fixed inset-0 z-[60] flex items-center justify-center p-4">
         <!-- Backdrop -->
-        <div class="absolute inset-0" :class="ui.prefillDestinationAccountId ? '' : 'bg-black/60 backdrop-blur-sm'" @click="ui.closeTransactionModal()"></div>
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="ui.closeTransactionModal()"></div>
 
         <!-- Modal -->
-        <div :class="[
-          'relative bg-[#12121a] border border-[#2a2a4a] rounded-2xl shadow-2xl shadow-black/50 overflow-hidden transition-all duration-300',
-          ui.prefillDestinationAccountId ? 'max-w-5xl max-h-[55vh] overflow-y-auto' : 'max-w-4xl'
-        ]" style="width:100%">
-          <!-- Header -->
-          <div class="flex items-center justify-between px-6 py-4 border-b border-[#2a2a4a]/60">
+        <div ref="modalContainerRef" :class="[
+          'relative bg-[#12121a] border border-[#2a2a4a] rounded-2xl shadow-2xl shadow-black/50 overflow-y-auto transition-all duration-300 w-full',
+          prefillAccount ? 'max-w-5xl max-h-[92vh]' : 'max-w-4xl max-h-[90vh]'
+        ]">
+
+          <!-- ===== EMBEDDED LEDGER (when creating from an account) ===== -->
+          <template v-if="prefillAccount && !isEditing">
+            <!-- Ledger Header -->
+            <div class="flex items-center justify-between px-6 py-3 border-b border-[#2a2a4a]/60 shrink-0 sticky top-0 bg-[#12121a] z-10">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-3 h-3 rounded-full shrink-0" :style="{ backgroundColor: prefillTypeColor }"></div>
+                <div class="min-w-0">
+                  <h2 class="text-base font-semibold text-[#e8e8f0] truncate">{{ prefillAccountName }}</h2>
+                  <p class="text-xs text-[#6a6a8a]">{{ prefillFullPath }}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 shrink-0 ml-4">
+                <div class="text-right">
+                  <p class="text-xs text-[#6a6a8a]">{{ t.common.balance }}</p>
+                  <p :class="['text-lg font-bold tabular-nums', prefillBalance >= 0 ? 'text-[#22c55e]' : 'text-[#ef4444]']">
+                    {{ formatCurrency(prefillBalance, ui.defaultCurrency) }}
+                  </p>
+                </div>
+                <button
+                  @click="ui.closeTransactionModal()"
+                  class="p-1.5 rounded-lg text-[#6a6a8a] hover:text-[#e8e8f0] hover:bg-[#1a1a2e] transition-all duration-200"
+                >
+                  <X class="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            <!-- Ledger Table Header -->
+            <div class="grid gap-2 px-6 py-2 border-b border-[#2a2a4a]/40 text-[10px] font-semibold text-[#6a6a8a] uppercase tracking-wider shrink-0" style="grid-template-columns: 80px 1fr 1fr 100px 100px 100px">
+              <div>{{ t.common.date }}</div>
+              <div>{{ t.common.description }}</div>
+              <div>{{ t.accounts.counterparty }}</div>
+              <div class="text-right">{{ t.common.debit }}</div>
+              <div class="text-right">{{ t.common.credit }}</div>
+              <div class="text-right">{{ t.common.balance }}</div>
+            </div>
+
+            <!-- Ledger Rows -->
+            <div ref="ledgerScrollRef" class="max-h-[30vh] overflow-y-auto">
+              <div
+                v-for="row in ledgerRows"
+                :key="row.tx.id"
+                class="grid gap-2 px-6 py-2 text-xs border-b border-[#2a2a4a]/15 hover:bg-[#1a1a2e]/50 transition-colors duration-150 cursor-pointer"
+                style="grid-template-columns: 80px 1fr 1fr 100px 100px 100px"
+                @click="editFromLedger(row.tx.id)"
+              >
+                <div class="text-[#a0a0c0]">{{ formatDate(row.tx.date) }}</div>
+                <div class="text-[#e8e8f0] font-medium truncate">{{ row.tx.description }}</div>
+                <div class="flex items-center gap-1.5 min-w-0">
+                  <div class="w-1.5 h-1.5 rounded-full shrink-0" :style="{ backgroundColor: row.counterColor }"></div>
+                  <span class="text-[#a0a0c0] truncate">{{ row.counterName }}</span>
+                </div>
+                <div class="text-right tabular-nums">
+                  <span v-if="row.debit > 0" class="text-[#22c55e]">{{ formatCurrency(row.debit, ui.defaultCurrency) }}</span>
+                </div>
+                <div class="text-right tabular-nums">
+                  <span v-if="row.credit > 0" class="text-[#ef4444]">{{ formatCurrency(row.credit, ui.defaultCurrency) }}</span>
+                </div>
+                <div class="text-right tabular-nums">
+                  <span :class="[row.runningBalance >= 0 ? 'text-[#e8e8f0]' : 'text-[#ef4444]']">
+                    {{ formatCurrency(row.runningBalance, ui.defaultCurrency) }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Empty state -->
+              <div v-if="ledgerRows.length === 0" class="px-6 py-8 text-center">
+                <p class="text-[#6a6a8a] text-xs">{{ t.accounts.noMovements }}</p>
+              </div>
+            </div>
+
+            <!-- Ledger Footer -->
+            <div v-if="ledgerRows.length > 0" class="grid gap-2 px-6 py-2 border-t border-[#2a2a4a]/60 text-[10px] font-semibold shrink-0 bg-[#0d0d15]/50" style="grid-template-columns: 80px 1fr 1fr 100px 100px 100px">
+              <div class="text-[#6a6a8a]">{{ ledgerRows.length }} {{ t.common.movements }}</div>
+              <div></div>
+              <div class="text-right text-[#6a6a8a]">{{ t.common.total }}</div>
+              <div class="text-right tabular-nums text-[#22c55e]">{{ formatCurrency(ledgerTotalDebits, ui.defaultCurrency) }}</div>
+              <div class="text-right tabular-nums text-[#ef4444]">{{ formatCurrency(ledgerTotalCredits, ui.defaultCurrency) }}</div>
+              <div class="text-right tabular-nums" :class="prefillBalance >= 0 ? 'text-[#22c55e]' : 'text-[#ef4444]'">
+                {{ formatCurrency(prefillBalance, ui.defaultCurrency) }}
+              </div>
+            </div>
+          </template>
+
+          <!-- ===== TRANSACTION FORM HEADER ===== -->
+          <div class="flex items-center justify-between px-6 py-4 border-b border-[#2a2a4a]/60" :class="prefillAccount && !isEditing ? 'border-t border-[#7c5cfc]/20 bg-[#0d0d15]/30' : ''">
             <h2 class="text-lg font-semibold text-[#e8e8f0]">
               {{ isEditing ? t.tx.editTransaction : t.tx.newTransaction }}
             </h2>
             <button
+              v-if="!prefillAccount || isEditing"
               @click="ui.closeTransactionModal()"
               class="p-1.5 rounded-lg text-[#6a6a8a] hover:text-[#e8e8f0] hover:bg-[#1a1a2e] transition-all duration-200"
             >
@@ -353,11 +439,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 import { useUIStore } from '@/stores/ui'
 import { useAccountStore } from '@/stores/accounts'
 import { useTransactionStore } from '@/stores/transactions'
-import { formatCurrency, today, generateId } from '@/utils/accounting'
+import { formatCurrency, formatDate, today, generateId } from '@/utils/accounting'
+import { ACCOUNT_TYPE_COLORS, isDebitPositive } from '@/types'
+import type { AccountType, Transaction } from '@/types'
 import { X, Plus, Trash2 } from 'lucide-vue-next'
 import AccountCombobox from '@/components/ui/AccountCombobox.vue'
 import { useI18n } from '@/i18n'
@@ -368,6 +456,89 @@ const ui = useUIStore()
 const accountStore = useAccountStore()
 const txStore = useTransactionStore()
 const error = ref('')
+const modalContainerRef = ref<HTMLElement | null>(null)
+const ledgerScrollRef = ref<HTMLElement | null>(null)
+
+// --- Embedded Ledger (when prefill is active) ---
+
+const prefillAccount = computed(() =>
+  ui.prefillDestinationAccountId ? accountStore.getAccount(ui.prefillDestinationAccountId) : null
+)
+
+const typeLabels = computed<Partial<Record<AccountType, string>>>(() => ({
+  asset: t.value.accountTypes.asset,
+  liability: t.value.accountTypes.liability,
+  equity: t.value.accountTypes.equity,
+  income: t.value.accountTypes.income,
+  expense: t.value.accountTypes.expense,
+}))
+
+const prefillTypeColor = computed(() => prefillAccount.value ? ACCOUNT_TYPE_COLORS[prefillAccount.value.type] : '#6a6a8a')
+const prefillAccountName = computed(() => prefillAccount.value ? accountStore.getDisplayName(prefillAccount.value, typeLabels.value) : '')
+const prefillFullPath = computed(() => prefillAccount.value ? accountStore.getFullPath(prefillAccount.value.id, typeLabels.value) : '')
+const prefillBalance = computed(() => prefillAccount.value ? accountStore.getAccountBalance(prefillAccount.value.id) : 0)
+
+interface LedgerRow {
+  tx: Transaction
+  debit: number
+  credit: number
+  counterName: string
+  counterColor: string
+  runningBalance: number
+}
+
+const ledgerRows = computed<LedgerRow[]>(() => {
+  if (!prefillAccount.value) return []
+  const transactions = txStore.getTransactionsForAccount(prefillAccount.value.id)
+  const sorted = [...transactions].sort((a, b) => a.date.localeCompare(b.date) || a.createdAt.localeCompare(b.createdAt))
+
+  let running = 0
+  const debitPositive = isDebitPositive(prefillAccount.value.type)
+
+  return sorted.map(tx => {
+    const mySplit = tx.splits.find(s => s.accountId === prefillAccount.value!.id)!
+    const counterSplits = tx.splits.filter(s => s.accountId !== prefillAccount.value!.id)
+
+    let counterName = t.value.common.multipleAccounts ?? 'Multiple'
+    let counterColor = '#6a6a8a'
+    if (counterSplits.length === 1) {
+      const counterAcc = accountStore.getAccount(counterSplits[0].accountId)
+      counterName = counterAcc ? accountStore.getDisplayName(counterAcc, typeLabels.value) : (t.value.common.unknown ?? '?')
+      counterColor = counterAcc ? ACCOUNT_TYPE_COLORS[counterAcc.type] : '#6a6a8a'
+    } else if (counterSplits.length > 1) {
+      counterName = counterSplits.map(s => {
+        const a = accountStore.getAccount(s.accountId)
+        return a ? accountStore.getDisplayName(a, typeLabels.value) : '?'
+      }).join(', ')
+    }
+
+    const debit = mySplit.amount > 0 ? mySplit.amount : 0
+    const credit = mySplit.amount < 0 ? -mySplit.amount : 0
+
+    if (debitPositive) {
+      running += mySplit.amount
+    } else {
+      running -= mySplit.amount
+    }
+
+    return { tx, debit, credit, counterName, counterColor, runningBalance: running }
+  })
+})
+
+const ledgerTotalDebits = computed(() => ledgerRows.value.reduce((sum, r) => sum + r.debit, 0))
+const ledgerTotalCredits = computed(() => ledgerRows.value.reduce((sum, r) => sum + r.credit, 0))
+
+function scrollLedgerToBottom() {
+  nextTick(() => {
+    if (ledgerScrollRef.value) {
+      ledgerScrollRef.value.scrollTop = ledgerScrollRef.value.scrollHeight
+    }
+  })
+}
+
+function editFromLedger(txId: string) {
+  ui.openTransactionModal(txId)
+}
 
 interface FlowEntry {
   id: string
@@ -450,6 +621,13 @@ watch(() => ui.transactionModalOpen, (open) => {
       destinations: [destEntry],
     }
     simpleAmountStr.value = ''
+  }
+})
+
+// Scroll ledger to bottom when modal opens or rows change
+watch(() => [ui.transactionModalOpen, ledgerRows.value.length], () => {
+  if (ui.transactionModalOpen && ui.prefillDestinationAccountId) {
+    scrollLedgerToBottom()
   }
 })
 
@@ -702,6 +880,7 @@ function handleSubmitAndNew() {
   }
   simpleAmountStr.value = ''
   error.value = ''
+  scrollLedgerToBottom()
 }
 </script>
 

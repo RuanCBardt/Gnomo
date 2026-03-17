@@ -6,10 +6,7 @@
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="$emit('close')"></div>
 
         <!-- Modal -->
-        <div :class="[
-          'relative flex flex-col bg-[#12121a] border border-[#2a2a4a] rounded-2xl shadow-2xl shadow-black/50 overflow-hidden transition-all duration-300 w-full',
-          isTransactionModalOpen ? 'max-w-5xl max-h-[40vh] mb-auto mt-4' : 'max-w-5xl max-h-[85vh]'
-        ]">
+        <div class="relative flex flex-col bg-[#12121a] border border-[#2a2a4a] rounded-2xl shadow-2xl shadow-black/50 overflow-hidden w-full max-w-5xl max-h-[85vh]">
           <!-- Header -->
           <div class="flex items-center justify-between px-6 py-4 border-b border-[#2a2a4a]/60 shrink-0">
             <div class="flex items-center gap-3 min-w-0">
@@ -145,8 +142,6 @@ const accountStore = useAccountStore()
 const txStore = useTransactionStore()
 const ui = useUIStore()
 
-const isTransactionModalOpen = computed(() => ui.transactionModalOpen && !!ui.prefillDestinationAccountId)
-
 const acctCurrency = computed(() => props.account?.currency ?? 'BRL')
 const typeColor = computed(() => props.account ? ACCOUNT_TYPE_COLORS[props.account.type] : '#6a6a8a')
 const typeLabels = computed<Partial<Record<AccountType, string>>>(() => ({
@@ -252,6 +247,7 @@ function editTransaction(txId: string) {
 }
 
 function createTransaction() {
+  emit('close')
   ui.openTransactionModal(undefined, props.account?.id)
 }
 </script>
