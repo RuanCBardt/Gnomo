@@ -6,7 +6,10 @@
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="$emit('close')"></div>
 
         <!-- Modal -->
-        <div class="relative w-full max-w-5xl max-h-[85vh] flex flex-col bg-[#12121a] border border-[#2a2a4a] rounded-2xl shadow-2xl shadow-black/50 overflow-hidden">
+        <div :class="[
+          'relative flex flex-col bg-[#12121a] border border-[#2a2a4a] rounded-2xl shadow-2xl shadow-black/50 overflow-hidden transition-all duration-300',
+          isTransactionModalOpen ? 'max-w-2xl max-h-[90vh] mr-auto ml-4' : 'max-w-5xl max-h-[85vh]'
+        ]" style="width:100%">
           <!-- Header -->
           <div class="flex items-center justify-between px-6 py-4 border-b border-[#2a2a4a]/60 shrink-0">
             <div class="flex items-center gap-3 min-w-0">
@@ -43,13 +46,16 @@
           </div>
 
           <!-- Table Header -->
-          <div class="grid gap-2 px-6 py-2.5 border-b border-[#2a2a4a]/40 text-xs font-semibold text-[#6a6a8a] uppercase tracking-wider shrink-0" style="grid-template-columns: 90px 1fr 1fr 110px 110px 110px">
+          <div class="grid gap-2 px-6 py-2.5 border-b border-[#2a2a4a]/40 text-xs font-semibold text-[#6a6a8a] uppercase tracking-wider shrink-0" :style="{ gridTemplateColumns: isTransactionModalOpen ? '80px 1fr 100px 100px' : '90px 1fr 1fr 110px 110px 110px' }">
             <div>{{ t.common.date }}</div>
             <div>{{ t.common.description }}</div>
-            <div>{{ t.accounts.counterparty }}</div>
-            <div class="text-right">{{ t.common.debit }}</div>
-            <div class="text-right">{{ t.common.credit }}</div>
-            <div class="text-right">{{ t.common.balance }}</div>
+            <template v-if="!isTransactionModalOpen">
+              <div>{{ t.accounts.counterparty }}</div>
+              <div class="text-right">{{ t.common.debit }}</div>
+              <div class="text-right">{{ t.common.credit }}</div>
+            </template>
+            <div class="text-right">{{ isTransactionModalOpen ? t.common.debit + '/' + t.common.credit : '' }}</div>
+            <div v-if="!isTransactionModalOpen" class="text-right">{{ t.common.balance }}</div>
           </div>
 
           <!-- Rows -->
@@ -58,33 +64,42 @@
               v-for="(row, idx) in ledgerRows"
               :key="row.tx.id"
               class="grid gap-2 px-6 py-3 text-sm border-b border-[#2a2a4a]/15 hover:bg-[#1a1a2e]/50 transition-colors duration-150 cursor-pointer group"
-              style="grid-template-columns: 90px 1fr 1fr 110px 110px 110px"
+              :style="{ gridTemplateColumns: isTransactionModalOpen ? '80px 1fr 100px 100px' : '90px 1fr 1fr 110px 110px 110px' }"
               @click="editTransaction(row.tx.id)"
             >
               <div class="text-[#a0a0c0]">{{ formatDate(row.tx.date) }}</div>
               <div class="text-[#e8e8f0] font-medium truncate">
                 {{ row.tx.description }}
-                <div v-if="row.originalCurrency" class="text-[10px] text-[#7c5cfc]/60">
-                  {{ getRowRate(row) }}
+              </div>
+              <template v-if="!isTransactionModalOpen">
+                <div class="flex items-center gap-1.5 min-w-0">
+                  <div class="w-1.5 h-1.5 rounded-full shrink-0" :style="{ backgroundColor: row.counterColor }"></div>
+                  <span class="text-[#a0a0c0] truncate">{{ row.counterName }}</span>
                 </div>
-              </div>
-              <div class="flex items-center gap-1.5 min-w-0">
-                <div class="w-1.5 h-1.5 rounded-full shrink-0" :style="{ backgroundColor: row.counterColor }"></div>
-                <span class="text-[#a0a0c0] truncate">{{ row.counterName }}</span>
-              </div>
-              <div class="text-right tabular-nums">
-                <span v-if="row.debit > 0" class="text-[#22c55e]">{{ formatCurrency(row.debit, ui.defaultCurrency) }}</span>
-                <div v-if="row.originalDebit > 0" class="text-[10px] text-[#7c5cfc]/70">
-                  {{ formatCurrency(row.originalDebit, row.originalCurrency) }}
+                <div class="text-right tabular-nums">
+                  <span v-if="row.debit > 0" class="text-[#22c55e]">{{ formatCurrency(row.debit, ui.defaultCurrency) }}</span>
+                  <div v-if="row.originalDebit > 0" class="text-[10px] text-[#7c5cfc]/70">
+                    {{ formatCurrency(row.originalDebit, row.originalCurrency) }}
+                  </div>
                 </div>
-              </div>
-              <div class="text-right tabular-nums">
-                <span v-if="row.credit > 0" class="text-[#ef4444]">{{ formatCurrency(row.credit, ui.defaultCurrency) }}</span>
-                <div v-if="row.originalCredit > 0" class="text-[10px] text-[#7c5cfc]/70">
-                  {{ formatCurrency(row.originalCredit, row.originalCurrency) }}
+                <div class="text-right tabular-nums">
+                  <span v-if="row.credit > 0" class="text-[#ef4444]">{{ formatCurrency(row.credit, ui.defaultCurrency) }}</span>
+                  <div v-if="row.originalCredit > 0" class="text-[10px] text-[#7c5cfc]/70">
+                    {{ formatCurrency(row.originalCredit, row.originalCurrency) }}
+                  </div>
                 </div>
+              </template>
+              <!-- Compact debit/credit for side-by-side mode -->
+              <div v-if="isTransactionModalOpen" class="text-right tabular-nums">
+                <span v-if="row.debit > 0" class="text-[#22c55e]">+{{ formatCurrency(row.debit, ui.defaultCurrency) }}</span>
+                <span v-else-if="row.credit > 0" class="text-[#ef4444]">-{{ formatCurrency(row.credit, ui.defaultCurrency) }}</span>
               </div>
-              <div class="text-right tabular-nums">
+              <div v-if="!isTransactionModalOpen" class="text-right tabular-nums">
+                <span :class="[row.runningBalance >= 0 ? 'text-[#e8e8f0]' : 'text-[#ef4444]']">
+                  {{ formatCurrency(row.runningBalance, ui.defaultCurrency) }}
+                </span>
+              </div>
+              <div v-else class="text-right tabular-nums">
                 <span :class="[row.runningBalance >= 0 ? 'text-[#e8e8f0]' : 'text-[#ef4444]']">
                   {{ formatCurrency(row.runningBalance, ui.defaultCurrency) }}
                 </span>
@@ -101,13 +116,18 @@
           </div>
 
           <!-- Footer summary -->
-          <div v-if="ledgerRows.length > 0" class="grid gap-2 px-6 py-3 border-t border-[#2a2a4a]/60 text-xs font-semibold shrink-0 bg-[#0d0d15]/50" style="grid-template-columns: 90px 1fr 1fr 110px 110px 110px">
+          <div v-if="ledgerRows.length > 0" :class="['grid gap-2 px-6 py-3 border-t border-[#2a2a4a]/60 text-xs font-semibold shrink-0 bg-[#0d0d15]/50']" :style="{ gridTemplateColumns: isTransactionModalOpen ? '80px 1fr 100px 100px' : '90px 1fr 1fr 110px 110px 110px' }">
             <div class="text-[#6a6a8a]">{{ ledgerRows.length }} {{ t.common.movements }}</div>
             <div></div>
-            <div class="text-right text-[#6a6a8a]">{{ t.common.total }}</div>
-            <div class="text-right tabular-nums text-[#22c55e]">{{ formatCurrency(totalDebits, ui.defaultCurrency) }}</div>
-            <div class="text-right tabular-nums text-[#ef4444]">{{ formatCurrency(totalCredits, ui.defaultCurrency) }}</div>
-            <div class="text-right tabular-nums" :class="balance >= 0 ? 'text-[#22c55e]' : 'text-[#ef4444]'">
+            <template v-if="!isTransactionModalOpen">
+              <div class="text-right text-[#6a6a8a]">{{ t.common.total }}</div>
+              <div class="text-right tabular-nums text-[#22c55e]">{{ formatCurrency(totalDebits, ui.defaultCurrency) }}</div>
+              <div class="text-right tabular-nums text-[#ef4444]">{{ formatCurrency(totalCredits, ui.defaultCurrency) }}</div>
+            </template>
+            <div v-if="isTransactionModalOpen" class="text-right tabular-nums" :class="balance >= 0 ? 'text-[#22c55e]' : 'text-[#ef4444]'">
+              {{ formatCurrency(balance, ui.defaultCurrency) }}
+            </div>
+            <div v-if="!isTransactionModalOpen" class="text-right tabular-nums" :class="balance >= 0 ? 'text-[#22c55e]' : 'text-[#ef4444]'">
               {{ formatCurrency(balance, ui.defaultCurrency) }}
             </div>
           </div>
@@ -141,6 +161,8 @@ const emit = defineEmits<{
 const accountStore = useAccountStore()
 const txStore = useTransactionStore()
 const ui = useUIStore()
+
+const isTransactionModalOpen = computed(() => ui.transactionModalOpen && !!ui.prefillDestinationAccountId)
 
 const acctCurrency = computed(() => props.account?.currency ?? 'BRL')
 const typeColor = computed(() => props.account ? ACCOUNT_TYPE_COLORS[props.account.type] : '#6a6a8a')
