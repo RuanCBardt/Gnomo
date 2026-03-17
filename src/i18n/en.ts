@@ -112,6 +112,7 @@ export const en: TranslationKeys = {
     impliedRate: 'Implied rate:',
     foreignAmount: 'Amount in',
     register: 'Record Transaction',
+    registerAndNew: 'Record & New',
     saveChanges: 'Save Changes',
     errDescription: 'Description is required',
     errAccount: 'Select an account for each entry',

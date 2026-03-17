@@ -110,6 +110,7 @@ export const pt = {
     impliedRate: 'Taxa implícita:',
     foreignAmount: 'Valor em',
     register: 'Registrar Transação',
+    registerAndNew: 'Registrar e Nova',
     saveChanges: 'Salvar Alterações',
     errDescription: 'Descrição é obrigatória',
     errAccount: 'Selecione uma conta para cada lançamento',

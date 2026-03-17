@@ -247,7 +247,6 @@ function editTransaction(txId: string) {
 }
 
 function createTransaction() {
-  emit('close')
   ui.openTransactionModal(undefined, props.account?.id)
 }
 </script>

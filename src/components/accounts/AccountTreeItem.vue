@@ -78,6 +78,7 @@
           :account="child"
           :depth="depth + 1"
           :force-expanded="props.forceExpanded"
+          :expand-generation="props.expandGeneration"
           @open-ledger="(acc: Account) => emit('open-ledger', acc)"
         />
       </div>
@@ -100,7 +101,8 @@ const { t } = useI18n()
 const props = defineProps<{
   account: Account
   depth: number
-  forceExpanded?: boolean | null
+  forceExpanded?: boolean
+  expandGeneration?: number
 }>()
 
 const emit = defineEmits<{
@@ -111,10 +113,8 @@ const accountStore = useAccountStore()
 const { defaultCurrency } = useUIStore()
 const expanded = ref(props.depth < 2) // Auto-expand root + second level
 
-watch(() => props.forceExpanded, (val) => {
-  if (val !== null && val !== undefined) {
-    expanded.value = val
-  }
+watch(() => props.expandGeneration, () => {
+  expanded.value = !!props.forceExpanded
 })
 
 const children = computed(() => accountStore.getChildren(props.account.id))

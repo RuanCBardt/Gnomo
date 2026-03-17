@@ -316,6 +316,20 @@
                 {{ t.common.cancel }}
               </button>
               <button
+                v-if="!isEditing && ui.prefillDestinationAccountId"
+                type="button"
+                :disabled="!isBalanced"
+                @click="handleSubmitAndNew"
+                :class="[
+                  'px-5 py-2 rounded-xl text-sm font-semibold transition-all duration-200',
+                  isBalanced
+                    ? 'bg-[#1a1a2e] border border-[#7c5cfc]/40 text-[#7c5cfc] hover:bg-[#7c5cfc]/10 hover:scale-[1.02] active:scale-[0.98]'
+                    : 'bg-[#2a2a4a] text-[#6a6a8a] cursor-not-allowed'
+                ]"
+              >
+                {{ t.tx.registerAndNew }}
+              </button>
+              <button
                 type="submit"
                 :disabled="!isBalanced"
                 :class="[
@@ -578,23 +592,23 @@ function removeDestination(idx: number) {
 
 // --- Submit ---
 
-function handleSubmit() {
+function doSubmit(): boolean {
   error.value = ''
 
   if (!form.value.description.trim()) {
     error.value = t.value.tx.errDescription
-    return
+    return false
   }
 
   const allEntries = [...form.value.sources, ...form.value.destinations]
   if (allEntries.some(e => !e.accountId)) {
     error.value = t.value.tx.errAccount
-    return
+    return false
   }
 
   if (!isBalanced.value) {
     error.value = t.value.tx.errBalance
-    return
+    return false
   }
 
   const splits = []
@@ -643,7 +657,7 @@ function handleSubmit() {
     })
     if (!ok) {
       error.value = t.value.tx.errSave
-      return
+      return false
     }
   } else {
     const tx = txStore.addTransaction({
@@ -654,11 +668,37 @@ function handleSubmit() {
     })
     if (!tx) {
       error.value = t.value.tx.errSave
-      return
+      return false
     }
   }
 
+  return true
+}
+
+function handleSubmit() {
+  const saved = doSubmit()
+  if (!saved) return
   ui.closeTransactionModal()
+}
+
+function handleSubmitAndNew() {
+  const saved = doSubmit()
+  if (!saved) return
+
+  // Reset form but keep the same destination prefill
+  const prefillAccountId = ui.prefillDestinationAccountId
+  const destEntry = newEntry()
+  if (prefillAccountId) {
+    destEntry.accountId = prefillAccountId
+  }
+  form.value = {
+    date: today(),
+    description: '',
+    sources: [newEntry()],
+    destinations: [destEntry],
+  }
+  simpleAmountStr.value = ''
+  error.value = ''
 }
 </script>
 

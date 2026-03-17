@@ -43,7 +43,8 @@
           :key="acc.id"
           :account="acc"
           :depth="0"
-          :force-expanded="forceExpanded"
+          :force-expanded="treeExpandedState"
+          :expand-generation="treeGeneration"
           @open-ledger="openLedger"
         />
       </div>
@@ -153,19 +154,20 @@ const { t } = useI18n()
 const activeTab = ref<AccountType | 'all'>('all')
 const showAddModal = ref(false)
 const ledgerAccount = ref<Account | null>(null)
-const forceExpanded = ref<boolean | null>(null)
+const treeExpandedState = ref(false)
+const treeGeneration = ref(0)
 
 function handleTabClick(tab: AccountType | 'all') {
   if (activeTab.value === tab) {
-    // Same tab clicked again: toggle expand all
-    forceExpanded.value = forceExpanded.value === true ? false : true
+    // Same tab: expand all
+    treeExpandedState.value = true
+    treeGeneration.value++
   } else {
     // Different tab: collapse all
     activeTab.value = tab
-    forceExpanded.value = false
+    treeExpandedState.value = false
+    treeGeneration.value++
   }
-  // Reset after Vue processes the change so future manual toggles work
-  setTimeout(() => { forceExpanded.value = null }, 50)
 }
 
 function openLedger(account: Account) {
