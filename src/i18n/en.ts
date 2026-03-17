@@ -156,11 +156,9 @@ export const en: TranslationKeys = {
     export: 'Export JSON',
     import: 'Import JSON',
     invalidFile: 'Invalid file',
-  },
-
-  // Topbar
-  topbar: {
-    searchPlaceholder: 'Search transactions, accounts...',
+    clearAll: 'Clear All Data',
+    clearAllDesc: 'Delete all accounts and transactions permanently',
+    clearAllConfirm: 'Are you sure you want to delete ALL accounts and transactions? This action cannot be undone.',
   },
 
   // Currency names

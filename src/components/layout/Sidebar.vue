@@ -72,7 +72,10 @@
     <div class="p-3 border-t border-[#2a2a4a]/40 shrink-0">
       <button
         @click="ui.toggleSidebar()"
-        class="flex items-center justify-center w-full py-2 rounded-lg text-[#6a6a8a] hover:text-[#a0a0c0] hover:bg-[#1a1a2e] transition-all duration-200"
+        class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-medium
+               text-[#a0a0c0] bg-[#1a1a2e]/60 border border-[#2a2a4a]/40
+               hover:text-[#e8e8f0] hover:bg-[#2a2a4a] hover:border-[#7c5cfc]/30
+               transition-all duration-200"
       >
         <PanelLeftClose v-if="!collapsed" class="w-4 h-4" />
         <PanelLeftOpen v-else class="w-4 h-4" />

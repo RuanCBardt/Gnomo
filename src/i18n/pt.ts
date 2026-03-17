@@ -154,11 +154,9 @@ export const pt = {
     export: 'Exportar JSON',
     import: 'Importar JSON',
     invalidFile: 'Arquivo inválido',
-  },
-
-  // Topbar
-  topbar: {
-    searchPlaceholder: 'Buscar transações, contas...',
+    clearAll: 'Limpar Todos os Dados',
+    clearAllDesc: 'Excluir todas as contas e transações permanentemente',
+    clearAllConfirm: 'Tem certeza que deseja excluir TODAS as contas e transações? Esta ação não pode ser desfeita.',
   },
 
   // Currency names

@@ -74,6 +74,26 @@
         </label>
       </div>
     </div>
+
+    <!-- Danger Zone -->
+    <div class="bg-[#12121a] border border-[#ef4444]/30 rounded-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-[#ef4444]/20">
+        <h2 class="text-sm font-semibold text-[#ef4444]">{{ t.settings.clearAll }}</h2>
+        <p class="text-xs text-[#6a6a8a] mt-0.5">{{ t.settings.clearAllDesc }}</p>
+      </div>
+      <div class="px-6 py-4">
+        <button
+          @click="clearAllData"
+          class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
+                 bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/30
+                 hover:bg-[#ef4444]/20 hover:border-[#ef4444]/50
+                 transition-all duration-200"
+        >
+          <Trash2 class="w-4 h-4" />
+          {{ t.settings.clearAll }}
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -83,7 +103,7 @@ import { useAccountStore } from '@/stores/accounts'
 import { useTransactionStore } from '@/stores/transactions'
 import { CURRENCIES } from '@/utils/currency'
 import { useI18n } from '@/i18n'
-import { Download, Upload } from 'lucide-vue-next'
+import { Download, Upload, Trash2 } from 'lucide-vue-next'
 
 const ui = useUIStore()
 const accountStore = useAccountStore()
@@ -133,5 +153,16 @@ function importData(e: Event) {
   }
   reader.readAsText(file)
   input.value = ''
+}
+
+function clearAllData() {
+  if (!confirm(t.value.settings.clearAllConfirm)) return
+  accountStore.accounts.splice(0, accountStore.accounts.length)
+  accountStore.persist()
+  txStore.transactions.splice(0, txStore.transactions.length)
+  txStore.persist()
+  localStorage.removeItem('gnomo-accounts')
+  localStorage.removeItem('gnomo-transactions')
+  window.location.reload()
 }
 </script>
