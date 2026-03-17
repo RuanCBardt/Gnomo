@@ -1,14 +1,14 @@
 <template>
   <Teleport to="body">
     <transition name="fade">
-      <div v-if="ui.transactionModalOpen" class="fixed inset-0 z-[60] flex items-center p-4" :class="ui.prefillDestinationAccountId ? 'justify-end' : 'justify-center'">
+      <div v-if="ui.transactionModalOpen" class="fixed inset-0 z-[60] flex items-center p-4" :class="ui.prefillDestinationAccountId ? 'justify-center items-end pb-4' : 'justify-center'">
         <!-- Backdrop -->
         <div class="absolute inset-0" :class="ui.prefillDestinationAccountId ? '' : 'bg-black/60 backdrop-blur-sm'" @click="ui.closeTransactionModal()"></div>
 
         <!-- Modal -->
         <div :class="[
           'relative bg-[#12121a] border border-[#2a2a4a] rounded-2xl shadow-2xl shadow-black/50 overflow-hidden transition-all duration-300',
-          ui.prefillDestinationAccountId ? 'max-w-2xl mr-4' : 'max-w-4xl'
+          ui.prefillDestinationAccountId ? 'max-w-5xl max-h-[55vh] overflow-y-auto' : 'max-w-4xl'
         ]" style="width:100%">
           <!-- Header -->
           <div class="flex items-center justify-between px-6 py-4 border-b border-[#2a2a4a]/60">
