@@ -1,0 +1,202 @@
+import type { TranslationKeys } from '.'
+
+export const en: TranslationKeys = {
+  // General
+  locale: 'en-GB',
+  dateLocale: 'en-GB',
+
+  // Navigation
+  nav: {
+    dashboard: 'Dashboard',
+    accounts: 'Chart of Accounts',
+    transactions: 'Transactions',
+    reports: 'Reports',
+    settings: 'Settings',
+  },
+
+  // Account types
+  accountTypes: {
+    asset: 'Assets',
+    liability: 'Liabilities',
+    equity: 'Equity',
+    income: 'Income',
+    expense: 'Expenses',
+  },
+  accountTypesSingular: {
+    asset: 'Asset',
+    liability: 'Liability',
+    equity: 'Equity',
+    income: 'Income',
+    expense: 'Expense',
+  },
+
+  // Common
+  common: {
+    cancel: 'Cancel',
+    save: 'Save',
+    delete: 'Delete',
+    date: 'Date',
+    description: 'Description',
+    debit: 'Debit',
+    credit: 'Credit',
+    balance: 'Balance',
+    total: 'Totals',
+    group: 'group',
+    unknown: 'Unknown',
+    to: 'to',
+    transactions: 'transactions',
+    movements: 'mov.',
+    all: 'All',
+    multipleAccounts: 'Multiple accounts',
+  },
+
+  // Dashboard
+  dashboard: {
+    title: 'Dashboard',
+    subtitle: 'Overview of your finances',
+    netWorth: 'Net Worth',
+    totalAssets: 'Total Assets',
+    totalIncome: 'Income (Total)',
+    totalExpenses: 'Expenses (Total)',
+    incomeVsExpenses: 'Income vs Expenses (Last 6 months)',
+    expensesByCategory: 'Expenses by Category',
+    recentTransactions: 'Recent Transactions',
+    viewAll: 'View all →',
+    assetBalances: 'Balances — Assets',
+    liabilityBalances: 'Balances — Liabilities',
+    chartIncome: 'Income',
+    chartExpenses: 'Expenses',
+  },
+
+  // Accounts
+  accounts: {
+    title: 'Chart of Accounts',
+    subtitle: 'Manage your accounts (double-entry bookkeeping)',
+    newAccount: 'New Account',
+    name: 'Name',
+    type: 'Type',
+    parentAccount: 'Parent Account',
+    currency: 'Currency',
+    groupAccount: 'Group account (cannot hold transactions)',
+    createAccount: 'Create Account',
+    confirmDelete: 'Are you sure you want to delete the account "{name}"?',
+    noMovements: 'No transactions in this account',
+    counterparty: 'Counterparty',
+  },
+
+  // Transactions
+  tx: {
+    title: 'Transactions',
+    subtitle: 'Record of all movements with double-entry bookkeeping',
+    newTransaction: 'New Transaction',
+    editTransaction: 'Edit Transaction',
+    filterPlaceholder: 'Filter transactions...',
+    allAccounts: 'All accounts',
+    status: 'Status',
+    account: 'Account',
+    noTransactions: 'No transactions found',
+    createFirst: 'Create first transaction →',
+    confirmDelete: 'Are you sure you want to delete this transaction?',
+    descriptionPlaceholder: 'e.g. Rent payment',
+    entries: 'Entries (Double-Entry)',
+    addLine: 'Add line',
+    selectAccount: 'Select account',
+    flowFrom: 'From',
+    flowTo: 'To',
+    addSource: 'Add source',
+    addDestination: 'Add destination',
+    balanced: 'Balanced ✓',
+    difference: 'Difference:',
+    debits: 'Debits:',
+    credits: 'Credits:',
+    impliedRate: 'Implied rate:',
+    foreignAmount: 'Amount in',
+    register: 'Record Transaction',
+    saveChanges: 'Save Changes',
+    errDescription: 'Description is required',
+    errAccount: 'Select an account for each entry',
+    errBalance: 'Debits and credits must be equal (double-entry)',
+    errSave: 'Error saving transaction',
+  },
+
+  // Reports
+  reports: {
+    title: 'Reports',
+    subtitle: 'Financial analysis and accounting statements',
+    backToReports: '← Reports',
+    balanceSheet: 'Balance Sheet',
+    balanceSheetDesc: 'Assets, liabilities and equity at a specific date.',
+    incomeStatement: 'Income Statement',
+    incomeStatementDesc: 'Income and expenses over a period, showing profit or loss.',
+    cashFlow: 'Cash Flow (coming soon)',
+    cashFlowDesc: 'Cash inflows and outflows.',
+    financialPosition: 'Financial position as of',
+    period: 'Period:',
+    balanced: '✓ Balanced',
+    unbalanced: '✗ Unbalanced',
+    assets: 'ASSETS',
+    liabilities: 'LIABILITIES',
+    equity: 'EQUITY',
+    income: 'INCOME',
+    expenses: 'EXPENSES',
+    profit: 'PROFIT',
+    loss: 'LOSS',
+  },
+
+  // Settings
+  settings: {
+    title: 'Settings',
+    subtitle: 'General system preferences',
+    defaultCurrency: 'Default Currency',
+    currencyDesc: 'The default currency used when creating new accounts',
+    language: 'Language',
+    languageDesc: 'System interface language',
+    data: 'Data',
+    dataDesc: 'Local data management',
+    export: 'Export JSON',
+    import: 'Import JSON',
+    invalidFile: 'Invalid file',
+  },
+
+  // Topbar
+  topbar: {
+    searchPlaceholder: 'Search transactions, accounts...',
+  },
+
+  // Currency names
+  currencies: {
+    BRL: 'Brazilian Real',
+    USD: 'US Dollar',
+    EUR: 'Euro',
+    GBP: 'Pound Sterling',
+    JPY: 'Japanese Yen',
+    CHF: 'Swiss Franc',
+    CAD: 'Canadian Dollar',
+    AUD: 'Australian Dollar',
+    ARS: 'Argentine Peso',
+    CNY: 'Chinese Yuan',
+    KRW: 'South Korean Won',
+    MXN: 'Mexican Peso',
+    INR: 'Indian Rupee',
+    SEK: 'Swedish Krona',
+    NOK: 'Norwegian Krone',
+    PLN: 'Polish Zloty',
+    TRY: 'Turkish Lira',
+    CLP: 'Chilean Peso',
+    COP: 'Colombian Peso',
+    PEN: 'Peruvian Sol',
+    UYU: 'Uruguayan Peso',
+  },
+
+  // Month names
+  months: [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
+  ],
+
+  // Languages
+  languages: {
+    pt: 'Português',
+    en: 'English (British)',
+  },
+}

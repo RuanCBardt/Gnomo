@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+/* ===== Custom Theme for Tailwind v4 ===== */
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --color-surface: #0a0a0f;
+  --color-surface-2: #0d0d15;
+  --color-surface-3: #12121a;
+  --color-surface-4: #1a1a2e;
+  --color-border: #2a2a4a;
+  --color-border-hover: #3a3a6a;
+  --color-text: #e8e8f0;
+  --color-text-muted: #a0a0c0;
+  --color-text-dim: #6a6a8a;
+  --color-accent: #7c5cfc;
+  --color-accent-2: #5c8cfc;
+}
+
+/* ===== Base Layer ===== */
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-hover);
+  }
+
+  /* Fix select appearance in dark mode */
+  select option {
+    background: var(--color-surface-3);
+    color: var(--color-text);
+  }
+
+  /* Fix date input appearance */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7);
+  }
+}
+
+/* ===== Custom Components ===== */
+@layer components {
+  .card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card-hover:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-border-hover);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(124, 92, 252, 0.15);
+  }
+}
+
+/* ===== Vue Transitions ===== */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.slide-enter-from {
+  opacity: 0;
+  transform: translateX(-16px);
+}
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(16px);
+}
+
+/* ===== Keyframe Animations ===== */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(124, 92, 252, 0.3); }
+  50% { box-shadow: 0 0 25px rgba(124, 92, 252, 0.3); }
+}
+

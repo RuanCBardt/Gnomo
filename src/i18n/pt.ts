@@ -1,0 +1,200 @@
+export const pt = {
+  // General
+  locale: 'pt-BR' as const,
+  dateLocale: 'pt-BR' as const,
+
+  // Navigation
+  nav: {
+    dashboard: 'Dashboard',
+    accounts: 'Plano de Contas',
+    transactions: 'Transações',
+    reports: 'Relatórios',
+    settings: 'Configurações',
+  },
+
+  // Account types
+  accountTypes: {
+    asset: 'Ativos',
+    liability: 'Passivos',
+    equity: 'Patrimônio Líquido',
+    income: 'Receitas',
+    expense: 'Despesas',
+  },
+  accountTypesSingular: {
+    asset: 'Ativo',
+    liability: 'Passivo',
+    equity: 'Patrimônio',
+    income: 'Receita',
+    expense: 'Despesa',
+  },
+
+  // Common
+  common: {
+    cancel: 'Cancelar',
+    save: 'Salvar',
+    delete: 'Excluir',
+    date: 'Data',
+    description: 'Descrição',
+    debit: 'Débito',
+    credit: 'Crédito',
+    balance: 'Saldo',
+    total: 'Totais',
+    group: 'grupo',
+    unknown: 'Desconhecida',
+    to: 'até',
+    transactions: 'transações',
+    movements: 'mov.',
+    all: 'Todas',
+    multipleAccounts: 'Múltiplas contas',
+  },
+
+  // Dashboard
+  dashboard: {
+    title: 'Dashboard',
+    subtitle: 'Visão geral das suas finanças',
+    netWorth: 'Patrimônio Líquido',
+    totalAssets: 'Total em Ativos',
+    totalIncome: 'Receitas (Total)',
+    totalExpenses: 'Despesas (Total)',
+    incomeVsExpenses: 'Receitas vs Despesas (Últimos 6 meses)',
+    expensesByCategory: 'Despesas por Categoria',
+    recentTransactions: 'Transações Recentes',
+    viewAll: 'Ver todas →',
+    assetBalances: 'Saldos — Ativos',
+    liabilityBalances: 'Saldos — Passivos',
+    chartIncome: 'Receitas',
+    chartExpenses: 'Despesas',
+  },
+
+  // Accounts
+  accounts: {
+    title: 'Plano de Contas',
+    subtitle: 'Gerencie suas contas contábeis (partidas dobradas)',
+    newAccount: 'Nova Conta',
+    name: 'Nome',
+    type: 'Tipo',
+    parentAccount: 'Conta Pai',
+    currency: 'Moeda',
+    groupAccount: 'Conta agrupadora (não recebe transações)',
+    createAccount: 'Criar Conta',
+    confirmDelete: 'Deseja realmente excluir a conta "{name}"?',
+    noMovements: 'Nenhuma movimentação nesta conta',
+    counterparty: 'Contrapartida',
+  },
+
+  // Transactions
+  tx: {
+    title: 'Transações',
+    subtitle: 'Registro de todas as movimentações com partidas dobradas',
+    newTransaction: 'Nova Transação',
+    editTransaction: 'Editar Transação',
+    filterPlaceholder: 'Filtrar transações...',
+    allAccounts: 'Todas as contas',
+    status: 'Status',
+    account: 'Conta',
+    noTransactions: 'Nenhuma transação encontrada',
+    createFirst: 'Criar primeira transação →',
+    confirmDelete: 'Deseja realmente excluir esta transação?',
+    descriptionPlaceholder: 'Ex: Pagamento aluguel',
+    entries: 'Lançamentos (Partidas Dobradas)',
+    addLine: 'Adicionar linha',
+    selectAccount: 'Selecionar conta',
+    flowFrom: 'Saindo de',
+    flowTo: 'Entrando em',
+    addSource: 'Adicionar origem',
+    addDestination: 'Adicionar destino',
+    balanced: 'Balanceado ✓',
+    difference: 'Diferença:',
+    debits: 'Débitos:',
+    credits: 'Créditos:',
+    impliedRate: 'Taxa implícita:',
+    foreignAmount: 'Valor em',
+    register: 'Registrar Transação',
+    saveChanges: 'Salvar Alterações',
+    errDescription: 'Descrição é obrigatória',
+    errAccount: 'Selecione uma conta para cada lançamento',
+    errBalance: 'Os débitos e créditos devem ser iguais (partidas dobradas)',
+    errSave: 'Erro ao salvar transação',
+  },
+
+  // Reports
+  reports: {
+    title: 'Relatórios',
+    subtitle: 'Análises financeiras e demonstrações contábeis',
+    backToReports: '← Relatórios',
+    balanceSheet: 'Balanço Patrimonial',
+    balanceSheetDesc: 'Ativos, passivos e patrimônio líquido em uma data específica.',
+    incomeStatement: 'Demonstração de Resultado',
+    incomeStatementDesc: 'Receitas e despesas em um período, mostrando lucro ou prejuízo.',
+    cashFlow: 'Fluxo de Caixa (em breve)',
+    cashFlowDesc: 'Movimentações de entrada e saída de caixa.',
+    financialPosition: 'Posição financeira em',
+    period: 'Período:',
+    balanced: '✓ Balanceado',
+    unbalanced: '✗ Desbalanceado',
+    assets: 'ATIVOS',
+    liabilities: 'PASSIVOS',
+    equity: 'PATRIMÔNIO',
+    income: 'RECEITAS',
+    expenses: 'DESPESAS',
+    profit: 'LUCRO',
+    loss: 'PREJUÍZO',
+  },
+
+  // Settings
+  settings: {
+    title: 'Configurações',
+    subtitle: 'Preferências gerais do sistema',
+    defaultCurrency: 'Moeda Padrão',
+    currencyDesc: 'A moeda utilizada por padrão ao criar novas contas',
+    language: 'Idioma',
+    languageDesc: 'Idioma da interface do sistema',
+    data: 'Dados',
+    dataDesc: 'Gerenciamento dos seus dados locais',
+    export: 'Exportar JSON',
+    import: 'Importar JSON',
+    invalidFile: 'Arquivo inválido',
+  },
+
+  // Topbar
+  topbar: {
+    searchPlaceholder: 'Buscar transações, contas...',
+  },
+
+  // Currency names
+  currencies: {
+    BRL: 'Real Brasileiro',
+    USD: 'Dólar Americano',
+    EUR: 'Euro',
+    GBP: 'Libra Esterlina',
+    JPY: 'Iene Japonês',
+    CHF: 'Franco Suíço',
+    CAD: 'Dólar Canadense',
+    AUD: 'Dólar Australiano',
+    ARS: 'Peso Argentino',
+    CNY: 'Yuan Chinês',
+    KRW: 'Won Sul-Coreano',
+    MXN: 'Peso Mexicano',
+    INR: 'Rupia Indiana',
+    SEK: 'Coroa Sueca',
+    NOK: 'Coroa Norueguesa',
+    PLN: 'Zloty Polonês',
+    TRY: 'Lira Turca',
+    CLP: 'Peso Chileno',
+    COP: 'Peso Colombiano',
+    PEN: 'Sol Peruano',
+    UYU: 'Peso Uruguaio',
+  },
+
+  // Month names
+  months: [
+    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+  ],
+
+  // Languages
+  languages: {
+    pt: 'Português',
+    en: 'English (British)',
+  },
+}
