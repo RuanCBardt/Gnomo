@@ -12,7 +12,7 @@
             <div class="flex items-center gap-3 min-w-0">
               <div class="w-3 h-3 rounded-full shrink-0" :style="{ backgroundColor: typeColor }"></div>
               <div class="min-w-0">
-                <h2 class="text-lg font-semibold text-[#e8e8f0] truncate">{{ account.name }}</h2>
+                <h2 class="text-lg font-semibold text-[#e8e8f0] truncate">{{ accountDisplayName }}</h2>
                 <p class="text-xs text-[#6a6a8a]">{{ fullPath }}</p>
               </div>
             </div>
@@ -114,7 +114,7 @@ import { useTransactionStore } from '@/stores/transactions'
 import { useUIStore } from '@/stores/ui'
 import { formatCurrency, formatDate } from '@/utils/accounting'
 import { ACCOUNT_TYPE_COLORS, isDebitPositive } from '@/types'
-import type { Account, Transaction } from '@/types'
+import type { Account, AccountType, Transaction } from '@/types'
 import { X, BookOpen } from 'lucide-vue-next'
 import { useI18n } from '@/i18n'
 
@@ -134,7 +134,19 @@ const ui = useUIStore()
 
 const acctCurrency = computed(() => props.account?.currency ?? 'BRL')
 const typeColor = computed(() => props.account ? ACCOUNT_TYPE_COLORS[props.account.type] : '#6a6a8a')
-const fullPath = computed(() => props.account ? accountStore.getFullPath(props.account.id) : '')
+const typeLabels = computed<Partial<Record<AccountType, string>>>(() => ({
+  asset: t.value.accountTypes.asset,
+  liability: t.value.accountTypes.liability,
+  equity: t.value.accountTypes.equity,
+  income: t.value.accountTypes.income,
+  expense: t.value.accountTypes.expense,
+}))
+const accountDisplayName = computed(() =>
+  props.account ? accountStore.getDisplayName(props.account, typeLabels.value) : ''
+)
+const fullPath = computed(() =>
+  props.account ? accountStore.getFullPath(props.account.id, typeLabels.value) : ''
+)
 const balance = computed(() => props.account ? accountStore.getAccountBalance(props.account.id) : 0)
 
 interface LedgerRow {
@@ -168,10 +180,13 @@ const ledgerRows = computed<LedgerRow[]>(() => {
     let counterColor = '#6a6a8a'
     if (counterSplits.length === 1) {
       const counterAcc = accountStore.getAccount(counterSplits[0].accountId)
-      counterName = counterAcc?.name ?? t.value.common.unknown
+      counterName = counterAcc ? accountStore.getDisplayName(counterAcc, typeLabels.value) : t.value.common.unknown
       counterColor = counterAcc ? ACCOUNT_TYPE_COLORS[counterAcc.type] : '#6a6a8a'
     } else if (counterSplits.length > 1) {
-      const names = counterSplits.map(s => accountStore.getAccount(s.accountId)?.name ?? '?')
+      const names = counterSplits.map(s => {
+        const account = accountStore.getAccount(s.accountId)
+        return account ? accountStore.getDisplayName(account, typeLabels.value) : '?'
+      })
       counterName = names.join(', ')
     }
 

@@ -44,7 +44,7 @@
               ]"
             >
               <div class="w-2 h-2 rounded-full shrink-0" :style="{ backgroundColor: ACCOUNT_TYPE_COLORS[opt.type] }"></div>
-              <span class="whitespace-nowrap">{{ accountStore.getFullPath(opt.id) }}</span>
+              <span class="whitespace-nowrap">{{ accountStore.getFullPath(opt.id, typeLabels) }}</span>
             </button>
           </template>
         </div>
@@ -121,7 +121,7 @@ const allOptions = computed(() =>
 const searchText = computed(() => {
   if (open.value) return query.value
   if (props.modelValue) {
-    return accountStore.getFullPath(props.modelValue)
+    return accountStore.getFullPath(props.modelValue, typeLabels.value)
   }
   return ''
 })
@@ -130,7 +130,7 @@ const filtered = computed(() => {
   if (!query.value) return allOptions.value
   const q = query.value.toLowerCase()
   return allOptions.value.filter(a => {
-    const path = accountStore.getFullPath(a.id).toLowerCase()
+    const path = accountStore.getFullPath(a.id, typeLabels.value).toLowerCase()
     return path.includes(q) || a.name.toLowerCase().includes(q)
   })
 })
@@ -160,7 +160,7 @@ function onInput(e: Event) {
 
 function select(id: string) {
   emit('update:modelValue', id)
-  query.value = accountStore.getFullPath(id)
+  query.value = accountStore.getFullPath(id, typeLabels.value)
   open.value = false
 }
 
@@ -191,7 +191,7 @@ onBeforeUnmount(() => document.removeEventListener('mousedown', onClickOutside))
 // When modelValue changes externally (e.g. form reset), sync query
 watch(() => props.modelValue, (id) => {
   if (!open.value) {
-    query.value = id ? accountStore.getFullPath(id) : ''
+    query.value = id ? accountStore.getFullPath(id, typeLabels.value) : ''
   }
 })
 </script>

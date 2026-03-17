@@ -32,7 +32,7 @@
             'text-sm font-medium transition-colors duration-200',
             account.placeholder ? 'text-[#a0a0c0]' : 'text-[#e8e8f0]'
           ]">
-            {{ account.name }}
+            {{ displayName }}
           </span>
           <span v-if="account.placeholder" class="ml-2 text-xs text-[#6a6a8a] bg-[#1a1a2e] px-1.5 py-0.5 rounded">
             {{ t.common.group }}
@@ -90,7 +90,7 @@ import { useAccountStore } from '@/stores/accounts'
 import { useUIStore } from '@/stores/ui'
 import { formatCurrency } from '@/utils/accounting'
 import { ACCOUNT_TYPE_COLORS } from '@/types'
-import type { Account } from '@/types'
+import type { Account, AccountType } from '@/types'
 import { ChevronRight, Trash2 } from 'lucide-vue-next'
 import { useI18n } from '@/i18n'
 
@@ -114,6 +114,14 @@ const hasChildren = computed(() => children.value.length > 0)
 const balance = computed(() => accountStore.getAccountBalance(props.account.id))
 const typeColor = computed(() => ACCOUNT_TYPE_COLORS[props.account.type])
 const canDelete = computed(() => !hasChildren.value && props.account.parentId !== null)
+const typeLabels = computed<Partial<Record<AccountType, string>>>(() => ({
+  asset: t.value.accountTypes.asset,
+  liability: t.value.accountTypes.liability,
+  equity: t.value.accountTypes.equity,
+  income: t.value.accountTypes.income,
+  expense: t.value.accountTypes.expense,
+}))
+const displayName = computed(() => accountStore.getDisplayName(props.account, typeLabels.value))
 
 function handleClick() {
   if (hasChildren.value) {
@@ -125,7 +133,7 @@ function handleClick() {
 }
 
 function handleDelete() {
-  if (confirm(t.value.accounts.confirmDelete.replace('{name}', props.account.name))) {
+  if (confirm(t.value.accounts.confirmDelete.replace('{name}', displayName.value))) {
     accountStore.deleteAccount(props.account.id)
   }
 }

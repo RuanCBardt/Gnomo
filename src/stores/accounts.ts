@@ -161,11 +161,25 @@ export const useAccountStore = defineStore('accounts', () => {
     return true
   }
 
-  function getFullPath(accountId: string): string {
+  function getDisplayName(
+    account: Account,
+    typeLabels?: Partial<Record<AccountType, string>>
+  ): string {
+    if (account.placeholder && account.parentId === null && typeLabels?.[account.type]) {
+      return typeLabels[account.type]!
+    }
+    return account.name
+  }
+
+  function getFullPath(
+    accountId: string,
+    typeLabels?: Partial<Record<AccountType, string>>
+  ): string {
     const account = getAccount(accountId)
     if (!account) return ''
-    if (!account.parentId) return account.name
-    return getFullPath(account.parentId) + ' → ' + account.name
+    const displayName = getDisplayName(account, typeLabels)
+    if (!account.parentId) return displayName
+    return getFullPath(account.parentId, typeLabels) + ' → ' + displayName
   }
 
   initialize()
@@ -184,6 +198,7 @@ export const useAccountStore = defineStore('accounts', () => {
     addAccount,
     updateAccount,
     deleteAccount,
+    getDisplayName,
     getFullPath,
     persist,
   }

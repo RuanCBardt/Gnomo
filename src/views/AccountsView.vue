@@ -86,7 +86,7 @@
                     class="w-full px-3 py-2 rounded-xl bg-[#0a0a0f] border border-[#2a2a4a] text-sm text-[#e8e8f0]
                            focus:outline-none focus:border-[#7c5cfc]/50 transition-all appearance-none">
                     <option v-for="acc in parentOptions" :key="acc.id" :value="acc.id">
-                      {{ accountStore.getFullPath(acc.id) }}
+                      {{ accountStore.getFullPath(acc.id, typeLabels) }}
                     </option>
                   </select>
                 </div>
@@ -165,6 +165,14 @@ const tabs = computed<{ value: AccountType | 'all'; label: string }[]>(() => [
   { value: 'income', label: t.value.accountTypes.income },
   { value: 'expense', label: t.value.accountTypes.expense },
 ])
+
+const typeLabels = computed(() => ({
+  asset: t.value.accountTypes.asset,
+  liability: t.value.accountTypes.liability,
+  equity: t.value.accountTypes.equity,
+  income: t.value.accountTypes.income,
+  expense: t.value.accountTypes.expense,
+}))
 
 const filteredRoots = computed(() => {
   if (activeTab.value === 'all') return accountStore.rootAccounts
