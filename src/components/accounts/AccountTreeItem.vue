@@ -3,14 +3,13 @@
     <!-- Account row -->
     <div
       :class="[
-        'flex items-center justify-between px-6 py-3 group transition-all duration-200 hover:bg-[#1a1a2e]/50 cursor-pointer',
+        'flex items-center px-6 py-3 group transition-all duration-200 hover:bg-[#1a1a2e]/50 cursor-pointer',
       ]"
-      :style="{ paddingLeft: `${depth * 24 + 24}px` }"
       @click="handleClick"
     >
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3 min-w-0 flex-1" :style="{ paddingLeft: `${depth * 24}px` }">
         <!-- Expand arrow -->
-        <div class="w-5 flex items-center justify-center" @click.stop="toggleExpand">
+        <div class="w-5 flex items-center justify-center shrink-0" @click.stop="toggleExpand">
           <ChevronRight
             v-if="hasChildren"
             :class="[
@@ -22,12 +21,12 @@
 
         <!-- Type indicator -->
         <div
-          class="w-2.5 h-2.5 rounded-full transition-transform duration-200 group-hover:scale-125"
+          class="w-2.5 h-2.5 rounded-full transition-transform duration-200 group-hover:scale-125 shrink-0"
           :style="{ backgroundColor: typeColor }"
         ></div>
 
         <!-- Account info -->
-        <div>
+        <div class="min-w-0">
           <span :class="[
             'text-sm font-medium transition-colors duration-200',
             account.placeholder ? 'text-[#a0a0c0]' : 'text-[#e8e8f0]'
@@ -40,7 +39,7 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-4 shrink-0 ml-4">
         <!-- Currency badge -->
         <span
           v-if="!props.account.placeholder && props.account.currency !== defaultCurrency"
@@ -117,7 +116,11 @@ watch(() => props.expandGeneration, () => {
   expanded.value = !!props.forceExpanded
 })
 
-const children = computed(() => accountStore.getChildren(props.account.id))
+const children = computed(() =>
+  [...accountStore.getChildren(props.account.id)].sort((a, b) =>
+    a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+  )
+)
 const hasChildren = computed(() => children.value.length > 0)
 const balance = computed(() => accountStore.getAccountBalance(props.account.id))
 const typeColor = computed(() => ACCOUNT_TYPE_COLORS[props.account.type])

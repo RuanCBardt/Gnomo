@@ -131,8 +131,7 @@
         </div>
       </transition>
     </Teleport>
-    <!-- Account Ledger Modal -->
-    <AccountLedger :account="ledgerAccount" @close="ledgerAccount = null" />
+    <!-- Account Ledger Modal (no longer used - unified view in TransactionModal) -->
   </div>
 </template>
 
@@ -144,7 +143,6 @@ import { useI18n } from '@/i18n'
 import type { Account, AccountType } from '@/types'
 import { Plus, X } from 'lucide-vue-next'
 import AccountTreeItem from '@/components/accounts/AccountTreeItem.vue'
-import AccountLedger from '@/components/accounts/AccountLedger.vue'
 import { CURRENCIES } from '@/utils/currency'
 
 const accountStore = useAccountStore()
@@ -153,7 +151,6 @@ const { t } = useI18n()
 
 const activeTab = ref<AccountType | 'all'>('all')
 const showAddModal = ref(false)
-const ledgerAccount = ref<Account | null>(null)
 const treeExpandedState = ref(false)
 const treeGeneration = ref(0)
 
@@ -171,7 +168,7 @@ function handleTabClick(tab: AccountType | 'all') {
 }
 
 function openLedger(account: Account) {
-  ledgerAccount.value = account
+  ui.openTransactionModal(undefined, account.id)
 }
 
 const tabs = computed<{ value: AccountType | 'all'; label: string }[]>(() => [
@@ -192,8 +189,10 @@ const typeLabels = computed(() => ({
 }))
 
 const filteredRoots = computed(() => {
-  if (activeTab.value === 'all') return accountStore.rootAccounts
-  return accountStore.rootAccounts.filter(a => a.type === activeTab.value)
+  const roots = activeTab.value === 'all'
+    ? accountStore.rootAccounts
+    : accountStore.rootAccounts.filter(a => a.type === activeTab.value)
+  return [...roots].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }))
 })
 
 const parentOptions = computed(() =>

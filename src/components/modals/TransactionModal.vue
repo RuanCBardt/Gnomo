@@ -244,7 +244,7 @@
                 </div>
 
                 <!-- Animated arrow with flowing particles -->
-                <div class="arrow-container relative w-16 h-12">
+                <div class="arrow-container relative w-16 h-12 cursor-pointer" @click="swapSourcesAndDestinations" :title="t.tx.flowFrom + ' ↔ ' + t.tx.flowTo">
                   <svg viewBox="0 0 64 48" class="w-full h-full">
                     <defs>
                       <linearGradient id="flowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -538,6 +538,12 @@ function scrollLedgerToBottom() {
 
 function editFromLedger(txId: string) {
   ui.openTransactionModal(txId)
+}
+
+function swapSourcesAndDestinations() {
+  const oldSources = form.value.sources
+  form.value.sources = form.value.destinations
+  form.value.destinations = oldSources
 }
 
 interface FlowEntry {
