@@ -1,7 +1,7 @@
 export const pt = {
   // General
-  locale: 'pt-BR' as const,
-  dateLocale: 'pt-BR' as const,
+  locale: 'pt-BR',
+  dateLocale: 'pt-BR',
 
   // Navigation
   nav: {
