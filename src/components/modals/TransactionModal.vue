@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
     <transition name="fade">
-      <div v-if="ui.transactionModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div v-if="ui.transactionModalOpen" class="fixed inset-0 z-[60] flex items-center justify-center p-4">
         <!-- Backdrop -->
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="ui.closeTransactionModal()"></div>
 
