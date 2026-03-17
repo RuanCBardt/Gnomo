@@ -156,11 +156,11 @@ const treeGeneration = ref(0)
 
 function handleTabClick(tab: AccountType | 'all') {
   if (activeTab.value === tab) {
-    // Same tab: expand all
-    treeExpandedState.value = true
+    // Same tab: toggle expand/collapse all
+    treeExpandedState.value = !treeExpandedState.value
     treeGeneration.value++
   } else {
-    // Different tab: collapse all
+    // Different tab: switch and collapse all
     activeTab.value = tab
     treeExpandedState.value = false
     treeGeneration.value++
