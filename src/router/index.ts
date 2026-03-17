@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/',
@@ -43,6 +43,16 @@ const router = createRouter({
       redirect: '/',
     },
   ],
+})
+
+// On page refresh (F5), always redirect to home
+let isInitialLoad = true
+router.beforeEach((to) => {
+  if (isInitialLoad && to.path !== '/') {
+    isInitialLoad = false
+    return '/'
+  }
+  isInitialLoad = false
 })
 
 export default router
