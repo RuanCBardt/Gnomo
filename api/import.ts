@@ -31,7 +31,9 @@ export default async function handler(request: Request) {
         hidden: (a.hidden as boolean) || false,
         createdAt: a.createdAt ? new Date(a.createdAt as string) : new Date(),
       }));
-      await db.insert(accounts).values(importAccounts);
+      for (let i = 0; i < importAccounts.length; i += 500) {
+        await db.insert(accounts).values(importAccounts.slice(i, i + 500));
+      }
     }
 
     // 3. Insert Transactions & Splits
@@ -44,7 +46,9 @@ export default async function handler(request: Request) {
         reconciled: (t.reconciled as boolean) || false,
         createdAt: t.createdAt ? new Date(t.createdAt as string) : new Date(),
       }));
-      await db.insert(transactions).values(importTxs);
+      for (let i = 0; i < importTxs.length; i += 500) {
+        await db.insert(transactions).values(importTxs.slice(i, i + 500));
+      }
 
       const allSplits = rawTxs.flatMap(t => {
         const tSplits = t.splits as Array<Record<string, unknown>>;
@@ -58,7 +62,9 @@ export default async function handler(request: Request) {
       });
 
       if (allSplits.length > 0) {
-        await db.insert(splits).values(allSplits);
+        for (let i = 0; i < allSplits.length; i += 500) {
+          await db.insert(splits).values(allSplits.slice(i, i + 500));
+        }
       }
     }
 

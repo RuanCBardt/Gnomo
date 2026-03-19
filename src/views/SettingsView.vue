@@ -144,7 +144,10 @@ function importData(e: Event) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       })
-      if (!res.ok) throw new Error('Falha na api de importação')
+      if (!res.ok) {
+        const errorText = await res.text()
+        throw new Error(`API erro: ${errorText}`)
+      }
 
       if (data.accounts && Array.isArray(data.accounts)) {
         accountStore.accounts.splice(0, accountStore.accounts.length, ...data.accounts)
@@ -161,8 +164,9 @@ function importData(e: Event) {
         ui.setLanguage(data.settings.language)
       }
       window.location.reload()
-    } catch {
-      alert(t.value.settings.invalidFile)
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err)
+      alert(t.value.settings.invalidFile + '\n\nDetalhes: ' + msg)
     }
   }
   reader.readAsText(file)
