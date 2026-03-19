@@ -3,4 +3,4 @@ compatibility_date = "2024-09-23"
 pages_build_output_dir = "./dist"
 
 [vars]
-DATABASE_URL = ""
+DATABASE_URL = "postgresql://neondb_owner:npg_pKz1E8ARcnLW@ep-mute-dream-acs3vf0i-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
