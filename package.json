@@ -5,11 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:worker": "wrangler dev",
+    "dev:full": "concurrently -n \"vite,worker\" -c \"cyan,magenta\" \"vite\" \"wrangler dev\"",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.2.1",
+    "concurrently": "^9.2.1",
     "tailwindcss": "^4.2.1",
     "typescript": "~5.9.3",
     "vite": "^7.0.0",
