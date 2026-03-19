@@ -1,14 +1,15 @@
-import { transactions, splits } from '../../src/db/schema';
+import { transactions, splits } from '../src/db/schema';
 import { desc, eq } from 'drizzle-orm';
 import { getDb, json, error } from './_shared';
 
-export const onRequest: PagesFunction<{ DATABASE_URL: string }> = async (ctx) => {
-  const { request, env } = ctx;
+export const config = {
+  runtime: 'edge',
+};
 
-  if (!env.DATABASE_URL) return error('DATABASE_URL missing', 500);
-  const db = getDb(env.DATABASE_URL);
-
+export default async function handler(request: Request) {
   try {
+    const db = getDb();
+
     if (request.method === 'GET') {
       const txs = await db.query.transactions.findMany({
         orderBy: [desc(transactions.date), desc(transactions.createdAt)],
@@ -63,4 +64,4 @@ export const onRequest: PagesFunction<{ DATABASE_URL: string }> = async (ctx) =>
     const msg = e instanceof Error ? e.message : 'Unknown error';
     return error(msg, 500);
   }
-};
+}

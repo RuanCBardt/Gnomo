@@ -1,15 +1,22 @@
-import { transactions, splits } from '../../../src/db/schema';
+import { transactions, splits } from '../../src/db/schema';
 import { eq } from 'drizzle-orm';
 import { getDb, json, error } from '../_shared';
 
-export const onRequest: PagesFunction<{ DATABASE_URL: string }, 'id'> = async (ctx) => {
-  const { request, env, params } = ctx;
-  const id = params.id as string;
+export const config = {
+  runtime: 'edge',
+};
 
-  if (!env.DATABASE_URL) return error('DATABASE_URL missing', 500);
-  const db = getDb(env.DATABASE_URL);
-
+export default async function handler(request: Request) {
   try {
+    const url = new URL(request.url);
+    const id = url.searchParams.get('id') || url.pathname.split('/').pop();
+
+    if (!id) {
+      return error('Missing transaction ID', 400);
+    }
+
+    const db = getDb();
+
     if (request.method === 'PUT') {
       const body = await request.json() as Record<string, unknown>;
       await db.transaction(async (tx) => {
@@ -54,4 +61,4 @@ export const onRequest: PagesFunction<{ DATABASE_URL: string }, 'id'> = async (c
     const msg = e instanceof Error ? e.message : 'Unknown error';
     return error(msg, 500);
   }
-};
+}

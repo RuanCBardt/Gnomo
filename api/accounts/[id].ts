@@ -1,15 +1,23 @@
-import { accounts } from '../../../src/db/schema';
+import { accounts } from '../../src/db/schema';
 import { eq } from 'drizzle-orm';
 import { getDb, json, error } from '../_shared';
 
-export const onRequest: PagesFunction<{ DATABASE_URL: string }, 'id'> = async (ctx) => {
-  const { request, env, params } = ctx;
-  const id = params.id as string;
+export const config = {
+  runtime: 'edge',
+};
 
-  if (!env.DATABASE_URL) return error('DATABASE_URL missing', 500);
-  const db = getDb(env.DATABASE_URL);
-
+export default async function handler(request: Request) {
   try {
+    const url = new URL(request.url);
+    // Vercel Edge functions extract dynamic paths into searchParams
+    const id = url.searchParams.get('id') || url.pathname.split('/').pop();
+    
+    if (!id) {
+      return error('Missing account ID', 400);
+    }
+
+    const db = getDb();
+
     if (request.method === 'PUT') {
       const body = await request.json() as Record<string, unknown>;
       const updated = await db.update(accounts).set({
@@ -34,4 +42,4 @@ export const onRequest: PagesFunction<{ DATABASE_URL: string }, 'id'> = async (c
     const msg = e instanceof Error ? e.message : 'Unknown error';
     return error(msg, 500);
   }
-};
+}

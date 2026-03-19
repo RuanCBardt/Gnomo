@@ -1,13 +1,14 @@
-import { accounts } from '../../src/db/schema';
+import { accounts } from '../src/db/schema';
 import { getDb, json, error } from './_shared';
 
-export const onRequest: PagesFunction<{ DATABASE_URL: string }> = async (ctx) => {
-  const { request, env } = ctx;
+export const config = {
+  runtime: 'edge',
+};
 
-  if (!env.DATABASE_URL) return error('DATABASE_URL missing', 500);
-  const db = getDb(env.DATABASE_URL);
-
+export default async function handler(request: Request) {
   try {
+    const db = getDb();
+
     if (request.method === 'GET') {
       const all = await db.select().from(accounts);
       return json(all);
@@ -34,4 +35,4 @@ export const onRequest: PagesFunction<{ DATABASE_URL: string }> = async (ctx) =>
     const msg = e instanceof Error ? e.message : 'Unknown error';
     return error(msg, 500);
   }
-};
+}
