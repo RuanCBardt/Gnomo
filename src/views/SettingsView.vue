@@ -132,7 +132,11 @@ function importData(e: Event) {
   const reader = new FileReader()
   reader.onload = async () => {
     try {
-      const data = JSON.parse(reader.result as string)
+      let text = reader.result as string
+      // Remove unescaped control characters (ASCII 0-31) to prevent JSON.parse errors
+      // from bad whitespace pasted into text fields.
+      text = text.replace(/[\u0000-\u001F]+/g, '')
+      const data = JSON.parse(text)
       
       // Envia para o servidor backend
       const res = await fetch('/api/import', {
