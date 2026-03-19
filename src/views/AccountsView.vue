@@ -210,8 +210,8 @@ const newAccount = ref({
   currency: ui.defaultCurrency,
 })
 
-function handleAddAccount() {
-  accountStore.addAccount({
+async function handleAddAccount() {
+  await accountStore.addAccount({
     name: newAccount.value.name,
     type: newAccount.value.type,
     parentId: newAccount.value.parentId,

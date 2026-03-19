@@ -17,7 +17,21 @@ const DEFAULT_ACCOUNTS: Omit<Account, 'createdAt'>[] = [
 export const useAccountStore = defineStore('accounts', () => {
   const accounts = ref<Account[]>([])
 
-  function initialize() {
+  async function initialize() {
+    try {
+      const res = await fetch('/api/accounts')
+      if (res.ok) {
+        const data = await res.json()
+        if (data && data.length > 0) {
+          accounts.value = data
+          return
+        }
+      }
+    } catch (e) {
+      console.error('Failed to fetch accounts from API', e)
+    }
+
+    // Fallback or Initial setup
     const saved = localStorage.getItem('gnomo-accounts')
     if (saved) {
       accounts.value = JSON.parse(saved)
@@ -126,7 +140,27 @@ export const useAccountStore = defineStore('accounts', () => {
     return total
   }
 
-  function addAccount(data: Omit<Account, 'id' | 'createdAt'>) {
+  async function addAccount(data: Omit<Account, 'id' | 'createdAt'>) {
+    try {
+      const res = await fetch('/api/accounts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      if (res.ok) {
+        const account = await res.json()
+        accounts.value.push(account)
+        return account
+      } else {
+        console.error('Failed to create account on server')
+      }
+    } catch (e) {
+      console.error('Failed to reach API', e)
+    }
+
+    // Fallback if API fails
     const account: Account = {
       ...data,
       id: generateId(),
@@ -137,15 +171,36 @@ export const useAccountStore = defineStore('accounts', () => {
     return account
   }
 
-  function updateAccount(id: string, data: Partial<Account>) {
+  async function updateAccount(id: string, data: Partial<Account>) {
+    try {
+      const res = await fetch(`/api/accounts/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      if (res.ok) {
+        const updated = await res.json()
+        const idx = accounts.value.findIndex(a => a.id === id)
+        if (idx >= 0) {
+          accounts.value[idx] = updated
+        }
+        return true
+      }
+    } catch (e) {
+      console.error('Failed to update account on server', e)
+    }
+
+    // Fallback
     const idx = accounts.value.findIndex(a => a.id === id)
     if (idx >= 0) {
       accounts.value[idx] = { ...accounts.value[idx], ...data }
       persist()
+      return true
     }
+    return false
   }
 
-  function deleteAccount(id: string) {
+  async function deleteAccount(id: string) {
     // Don't delete if has children or transactions
     const children = getChildren(id)
     if (children.length > 0) return false
@@ -155,6 +210,15 @@ export const useAccountStore = defineStore('accounts', () => {
       tx.splits.some(s => s.accountId === id)
     )
     if (hasTx) return false
+
+    try {
+      const res = await fetch(`/api/accounts/${id}`, { method: 'DELETE' })
+      if (!res.ok) {
+        console.error('Failed to delete account from server')
+      }
+    } catch (e) {
+      console.error('Failed to reach API', e)
+    }
 
     accounts.value = accounts.value.filter(a => a.id !== id)
     persist()

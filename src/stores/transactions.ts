@@ -6,7 +6,20 @@ import { generateId, validateDoubleEntry } from '@/utils/accounting'
 export const useTransactionStore = defineStore('transactions', () => {
   const transactions = ref<Transaction[]>([])
 
-  function initialize() {
+  async function initialize() {
+    try {
+      const res = await fetch('/api/transactions')
+      if (res.ok) {
+        const data = await res.json()
+        if (data && data.length > 0) {
+          transactions.value = data
+          return
+        }
+      }
+    } catch (e) {
+      console.error('Failed to fetch transactions from API', e)
+    }
+
     const saved = localStorage.getItem('gnomo-transactions')
     if (saved) {
       transactions.value = JSON.parse(saved)
@@ -146,9 +159,25 @@ export const useTransactionStore = defineStore('transactions', () => {
     )
   }
 
-  function addTransaction(data: Omit<Transaction, 'id' | 'createdAt'>): Transaction | null {
+  async function addTransaction(data: Omit<Transaction, 'id' | 'createdAt'>): Promise<Transaction | null> {
     if (!validateDoubleEntry(data.splits)) return null
 
+    try {
+      const res = await fetch('/api/transactions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      if (res.ok) {
+        const transaction = await res.json()
+        transactions.value.push(transaction)
+        return transaction
+      }
+    } catch (e) {
+      console.error('Failed to create transaction on server', e)
+    }
+
+    // Fallback
     const transaction: Transaction = {
       ...data,
       id: generateId(),
@@ -159,21 +188,47 @@ export const useTransactionStore = defineStore('transactions', () => {
     return transaction
   }
 
-  function updateTransaction(id: string, data: Partial<Omit<Transaction, 'id' | 'createdAt'>>): boolean {
+  async function updateTransaction(id: string, data: Partial<Omit<Transaction, 'id' | 'createdAt'>>): Promise<boolean> {
     const idx = transactions.value.findIndex(t => t.id === id)
     if (idx < 0) return false
 
-    const updated = { ...transactions.value[idx], ...data }
     if (data.splits && !validateDoubleEntry(data.splits)) return false
 
+    try {
+      const res = await fetch(`/api/transactions/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      if (res.ok) {
+        const updated = await res.json()
+        transactions.value[idx] = updated
+        return true
+      }
+    } catch (e) {
+      console.error('Failed to update transaction on server', e)
+    }
+
+    // Fallback
+    const updated = { ...transactions.value[idx], ...data }
     transactions.value[idx] = updated
     persist()
     return true
   }
 
-  function deleteTransaction(id: string): boolean {
+  async function deleteTransaction(id: string): Promise<boolean> {
     const idx = transactions.value.findIndex(t => t.id === id)
     if (idx < 0) return false
+
+    try {
+      const res = await fetch(`/api/transactions/${id}`, { method: 'DELETE' })
+      if (!res.ok) {
+        console.error('Failed to delete transaction from server')
+      }
+    } catch (e) {
+      console.error('Failed to reach API', e)
+    }
+
     transactions.value.splice(idx, 1)
     persist()
     return true

@@ -155,14 +155,22 @@ function importData(e: Event) {
   input.value = ''
 }
 
-function clearAllData() {
+async function clearAllData() {
   if (!confirm(t.value.settings.clearAllConfirm)) return
-  accountStore.accounts.splice(0, accountStore.accounts.length)
-  accountStore.persist()
-  txStore.transactions.splice(0, txStore.transactions.length)
-  txStore.persist()
-  localStorage.removeItem('gnomo-accounts')
-  localStorage.removeItem('gnomo-transactions')
-  window.location.reload()
+  
+  try {
+    const res = await fetch('/api/clear-all', { method: 'POST' })
+    if (res.ok) {
+      accountStore.accounts.splice(0, accountStore.accounts.length)
+      txStore.transactions.splice(0, txStore.transactions.length)
+      localStorage.removeItem('gnomo-accounts')
+      localStorage.removeItem('gnomo-transactions')
+      window.location.reload()
+    } else {
+      alert('Failed to clear data on server')
+    }
+  } catch (e) {
+    console.error('API Error:', e)
+  }
 }
 </script>
