@@ -28,25 +28,23 @@ export default async function handler(request: Request) {
       const body = await request.json() as Record<string, unknown>;
       const txId = (body.id as string) || crypto.randomUUID();
 
-      await db.transaction(async (tx) => {
-        await tx.insert(transactions).values({
-          id: txId,
-          date: new Date(body.date as string),
-          description: body.description as string,
-          reconciled: (body.reconciled as boolean) || false,
-        });
-        const rawSplits = body.splits as Array<Record<string, unknown>>;
-        if (rawSplits && rawSplits.length > 0) {
-          const splitValues = rawSplits.map(s => ({
-            id: (s.id as string) || crypto.randomUUID(),
-            transactionId: txId,
-            accountId: s.accountId as string,
-            amount: s.amount as number,
-            memo: (s.memo as string) || null,
-          }));
-          await tx.insert(splits).values(splitValues);
-        }
+      await db.insert(transactions).values({
+        id: txId,
+        date: new Date(body.date as string),
+        description: body.description as string,
+        reconciled: (body.reconciled as boolean) || false,
       });
+      const rawSplits = body.splits as Array<Record<string, unknown>>;
+      if (rawSplits && rawSplits.length > 0) {
+        const splitValues = rawSplits.map(s => ({
+          id: (s.id as string) || crypto.randomUUID(),
+          transactionId: txId,
+          accountId: s.accountId as string,
+          amount: s.amount as number,
+          memo: (s.memo as string) || null,
+        }));
+        await db.insert(splits).values(splitValues);
+      }
 
       const newTx = await db.query.transactions.findFirst({
         where: eq(transactions.id, txId),

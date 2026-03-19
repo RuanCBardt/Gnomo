@@ -130,9 +130,18 @@ function importData(e: Event) {
   const file = input.files?.[0]
   if (!file) return
   const reader = new FileReader()
-  reader.onload = () => {
+  reader.onload = async () => {
     try {
       const data = JSON.parse(reader.result as string)
+      
+      // Envia para o servidor backend
+      const res = await fetch('/api/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      if (!res.ok) throw new Error('Falha na api de importação')
+
       if (data.accounts && Array.isArray(data.accounts)) {
         accountStore.accounts.splice(0, accountStore.accounts.length, ...data.accounts)
         accountStore.persist()
@@ -147,6 +156,7 @@ function importData(e: Event) {
       if (data.settings?.language) {
         ui.setLanguage(data.settings.language)
       }
+      window.location.reload()
     } catch {
       alert(t.value.settings.invalidFile)
     }

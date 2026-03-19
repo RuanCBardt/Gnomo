@@ -19,26 +19,24 @@ export default async function handler(request: Request) {
 
     if (request.method === 'PUT') {
       const body = await request.json() as Record<string, unknown>;
-      await db.transaction(async (tx) => {
-        await tx.update(transactions).set({
-          date: new Date(body.date as string),
-          description: body.description as string,
-          reconciled: body.reconciled as boolean,
-        }).where(eq(transactions.id, id));
+      await db.update(transactions).set({
+        date: new Date(body.date as string),
+        description: body.description as string,
+        reconciled: body.reconciled as boolean,
+      }).where(eq(transactions.id, id));
 
-        const rawSplits = body.splits as Array<Record<string, unknown>>;
-        if (rawSplits) {
-          await tx.delete(splits).where(eq(splits.transactionId, id));
-          const splitValues = rawSplits.map(s => ({
-            id: (s.id as string) || crypto.randomUUID(),
-            transactionId: id,
-            accountId: s.accountId as string,
-            amount: s.amount as number,
-            memo: (s.memo as string) || null,
-          }));
-          await tx.insert(splits).values(splitValues);
-        }
-      });
+      const rawSplits = body.splits as Array<Record<string, unknown>>;
+      if (rawSplits) {
+        await db.delete(splits).where(eq(splits.transactionId, id));
+        const splitValues = rawSplits.map(s => ({
+          id: (s.id as string) || crypto.randomUUID(),
+          transactionId: id,
+          accountId: s.accountId as string,
+          amount: s.amount as number,
+          memo: (s.memo as string) || null,
+        }));
+        await db.insert(splits).values(splitValues);
+      }
 
       const updated = await db.query.transactions.findFirst({
         where: eq(transactions.id, id),
