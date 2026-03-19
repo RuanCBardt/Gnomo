@@ -5,12 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:worker": "wrangler dev",
-    "dev:full": "concurrently -n \"vite,worker\" -c \"cyan,magenta\" \"vite\" \"wrangler dev\"",
+    "dev:worker": "wrangler pages dev dist --proxy 5173",
+    "dev:full": "concurrently -n \"vite,worker\" -c \"cyan,magenta\" \"vite\" \"wrangler pages dev dist --proxy 5173\"",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && wrangler pages deploy dist"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260317.1",
     "@tailwindcss/vite": "^4.2.1",
     "concurrently": "^9.2.1",
     "tailwindcss": "^4.2.1",
