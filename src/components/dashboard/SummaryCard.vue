@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'relative overflow-hidden rounded-2xl border border-[#2a2a4a]/60 bg-[#12121a] p-5',
+      'relative overflow-hidden rounded-2xl border border-[#2a2a4a]/60 bg-[#12121a] p-4 md:p-5',
       'transition-all duration-300 ease-out cursor-default',
       'hover:border-[#2a2a4a] hover:shadow-lg hover:shadow-black/20 hover:-translate-y-0.5',
       'group'
@@ -18,7 +18,7 @@
     <div class="relative flex items-start justify-between">
       <div class="space-y-2">
         <p class="text-xs font-medium text-[#6a6a8a] uppercase tracking-wider">{{ label }}</p>
-        <p class="text-2xl font-bold text-[#e8e8f0] tracking-tight">{{ value }}</p>
+        <p class="text-lg md:text-2xl font-bold text-[#e8e8f0] tracking-tight">{{ value }}</p>
       </div>
       <div
         :class="[

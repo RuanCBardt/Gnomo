@@ -1,0 +1,1523 @@
+{
+  "settings": {
+    "defaultCurrency": "BRL",
+    "language": "pt"
+  },
+  "accounts": [
+    {
+      "id": "root-asset",
+      "name": "Ativos",
+      "type": "asset",
+      "parentId": null,
+      "description": "Todos os ativos",
+      "currency": "BRL",
+      "placeholder": true,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "root-liability",
+      "name": "Passivos",
+      "type": "liability",
+      "parentId": null,
+      "description": "Todos os passivos",
+      "currency": "BRL",
+      "placeholder": true,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "root-equity",
+      "name": "Patrimonio",
+      "type": "equity",
+      "parentId": null,
+      "description": "Patrimonio liquido",
+      "currency": "BRL",
+      "placeholder": true,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "root-income",
+      "name": "Receitas",
+      "type": "income",
+      "parentId": null,
+      "description": "Todas as receitas",
+      "currency": "BRL",
+      "placeholder": true,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "root-expense",
+      "name": "Despesas",
+      "type": "expense",
+      "parentId": null,
+      "description": "Todas as despesas",
+      "currency": "BRL",
+      "placeholder": true,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-nubank",
+      "name": "Nubank Conta Corrente",
+      "type": "asset",
+      "parentId": "root-asset",
+      "description": "Conta corrente Nubank",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-inter",
+      "name": "Banco Inter",
+      "type": "asset",
+      "parentId": "root-asset",
+      "description": "Conta corrente Inter",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-poupanca",
+      "name": "Poupanca",
+      "type": "asset",
+      "parentId": "root-asset",
+      "description": "Conta poupanca",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-investimentos",
+      "name": "Investimentos",
+      "type": "asset",
+      "parentId": "root-asset",
+      "description": "Carteira de investimentos",
+      "currency": "BRL",
+      "placeholder": true,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-tesouro",
+      "name": "Tesouro Direto",
+      "type": "asset",
+      "parentId": "acc-investimentos",
+      "description": "Titulos publicos",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-acoes",
+      "name": "Acoes",
+      "type": "asset",
+      "parentId": "acc-investimentos",
+      "description": "Carteira de acoes na B3",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-cripto",
+      "name": "Criptomoedas",
+      "type": "asset",
+      "parentId": "acc-investimentos",
+      "description": "Bitcoin e Ethereum",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-cartao-nubank",
+      "name": "Cartao Nubank",
+      "type": "liability",
+      "parentId": "root-liability",
+      "description": "Cartao de credito Nubank",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-cartao-inter",
+      "name": "Cartao Inter",
+      "type": "liability",
+      "parentId": "root-liability",
+      "description": "Cartao de credito Inter",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-financiamento",
+      "name": "Financiamento Carro",
+      "type": "liability",
+      "parentId": "root-liability",
+      "description": "Financiamento do carro",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-saldo-inicial",
+      "name": "Saldo Inicial",
+      "type": "equity",
+      "parentId": "root-equity",
+      "description": "Saldos iniciais das contas",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-salario",
+      "name": "Salario",
+      "type": "income",
+      "parentId": "root-income",
+      "description": "Salario mensal",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-freelance",
+      "name": "Freelance",
+      "type": "income",
+      "parentId": "root-income",
+      "description": "Trabalhos extras",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-rendimentos",
+      "name": "Rendimentos",
+      "type": "income",
+      "parentId": "root-income",
+      "description": "Rendimentos de investimentos",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "grp-moradia",
+      "name": "Moradia",
+      "type": "expense",
+      "parentId": "root-expense",
+      "description": "Custos de moradia",
+      "currency": "BRL",
+      "placeholder": true,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-aluguel",
+      "name": "Aluguel",
+      "type": "expense",
+      "parentId": "grp-moradia",
+      "description": "Aluguel mensal",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-condominio",
+      "name": "Condominio",
+      "type": "expense",
+      "parentId": "grp-moradia",
+      "description": "Taxa de condominio",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-luz",
+      "name": "Luz",
+      "type": "expense",
+      "parentId": "grp-moradia",
+      "description": "Conta de energia",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-agua",
+      "name": "Agua",
+      "type": "expense",
+      "parentId": "grp-moradia",
+      "description": "Conta de agua",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-internet",
+      "name": "Internet",
+      "type": "expense",
+      "parentId": "grp-moradia",
+      "description": "Plano de internet",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "grp-alimentacao",
+      "name": "Alimentacao",
+      "type": "expense",
+      "parentId": "root-expense",
+      "description": "Gastos com alimentacao",
+      "currency": "BRL",
+      "placeholder": true,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-supermercado",
+      "name": "Supermercado",
+      "type": "expense",
+      "parentId": "grp-alimentacao",
+      "description": "Compras no mercado",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-restaurantes",
+      "name": "Restaurantes",
+      "type": "expense",
+      "parentId": "grp-alimentacao",
+      "description": "Refeicoes fora",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-ifood",
+      "name": "iFood e Delivery",
+      "type": "expense",
+      "parentId": "grp-alimentacao",
+      "description": "Delivery de comida",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "grp-transporte",
+      "name": "Transporte",
+      "type": "expense",
+      "parentId": "root-expense",
+      "description": "Custos de transporte",
+      "currency": "BRL",
+      "placeholder": true,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-combustivel",
+      "name": "Combustivel",
+      "type": "expense",
+      "parentId": "grp-transporte",
+      "description": "Gasolina e etanol",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-uber",
+      "name": "Uber e 99",
+      "type": "expense",
+      "parentId": "grp-transporte",
+      "description": "Corridas de app",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-estacionamento",
+      "name": "Estacionamento",
+      "type": "expense",
+      "parentId": "grp-transporte",
+      "description": "Estacionamento e pedagio",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "grp-lazer",
+      "name": "Lazer",
+      "type": "expense",
+      "parentId": "root-expense",
+      "description": "Entretenimento e lazer",
+      "currency": "BRL",
+      "placeholder": true,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-streaming",
+      "name": "Streaming",
+      "type": "expense",
+      "parentId": "grp-lazer",
+      "description": "Netflix, Spotify, etc",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-jogos",
+      "name": "Jogos",
+      "type": "expense",
+      "parentId": "grp-lazer",
+      "description": "Games e Steam",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-viagens",
+      "name": "Viagens",
+      "type": "expense",
+      "parentId": "grp-lazer",
+      "description": "Passagens e hoteis",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "grp-pessoal",
+      "name": "Pessoal",
+      "type": "expense",
+      "parentId": "root-expense",
+      "description": "Gastos pessoais",
+      "currency": "BRL",
+      "placeholder": true,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-saude",
+      "name": "Saude",
+      "type": "expense",
+      "parentId": "grp-pessoal",
+      "description": "Consultas e remedios",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-academia",
+      "name": "Academia",
+      "type": "expense",
+      "parentId": "grp-pessoal",
+      "description": "Mensalidade academia",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-roupas",
+      "name": "Roupas",
+      "type": "expense",
+      "parentId": "grp-pessoal",
+      "description": "Vestuario",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-educacao",
+      "name": "Educacao",
+      "type": "expense",
+      "parentId": "root-expense",
+      "description": "Cursos e livros",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-celular",
+      "name": "Celular",
+      "type": "expense",
+      "parentId": "root-expense",
+      "description": "Plano de celular",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "acc-diversos",
+      "name": "Diversos",
+      "type": "expense",
+      "parentId": "root-expense",
+      "description": "Outros gastos",
+      "currency": "BRL",
+      "placeholder": false,
+      "hidden": false,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "tx-001",
+      "date": "2024-01-05T12:00:00.000Z",
+      "description": "Saldo inicial Nubank",
+      "reconciled": true,
+      "createdAt": "2024-01-05T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-001a",
+          "accountId": "acc-nubank",
+          "amount": 8500,
+          "memo": "Saldo inicial"
+        },
+        {
+          "id": "sp-001b",
+          "accountId": "acc-saldo-inicial",
+          "amount": -8500,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-002",
+      "date": "2024-01-05T12:00:00.000Z",
+      "description": "Saldo inicial Inter",
+      "reconciled": true,
+      "createdAt": "2024-01-05T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-002a",
+          "accountId": "acc-inter",
+          "amount": 3200,
+          "memo": "Saldo inicial"
+        },
+        {
+          "id": "sp-002b",
+          "accountId": "acc-saldo-inicial",
+          "amount": -3200,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-003",
+      "date": "2024-01-05T12:00:00.000Z",
+      "description": "Saldo inicial Poupanca",
+      "reconciled": true,
+      "createdAt": "2024-01-05T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-003a",
+          "accountId": "acc-poupanca",
+          "amount": 15000,
+          "memo": "Reserva"
+        },
+        {
+          "id": "sp-003b",
+          "accountId": "acc-saldo-inicial",
+          "amount": -15000,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-004",
+      "date": "2024-01-05T12:00:00.000Z",
+      "description": "Saldo inicial Tesouro Direto",
+      "reconciled": true,
+      "createdAt": "2024-01-05T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-004a",
+          "accountId": "acc-tesouro",
+          "amount": 20000,
+          "memo": "Tesouro Selic"
+        },
+        {
+          "id": "sp-004b",
+          "accountId": "acc-saldo-inicial",
+          "amount": -20000,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-005",
+      "date": "2024-01-05T12:00:00.000Z",
+      "description": "Saldo inicial Financiamento",
+      "reconciled": true,
+      "createdAt": "2024-01-05T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-005a",
+          "accountId": "acc-financiamento",
+          "amount": -45000,
+          "memo": "Saldo devedor carro"
+        },
+        {
+          "id": "sp-005b",
+          "accountId": "acc-saldo-inicial",
+          "amount": 45000,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-010",
+      "date": "2024-01-10T12:00:00.000Z",
+      "description": "Salario Janeiro",
+      "reconciled": true,
+      "createdAt": "2024-01-10T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-010a",
+          "accountId": "acc-nubank",
+          "amount": 7500,
+          "memo": "Salario liquido"
+        },
+        {
+          "id": "sp-010b",
+          "accountId": "acc-salario",
+          "amount": -7500,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-011",
+      "date": "2024-01-12T12:00:00.000Z",
+      "description": "Aluguel Janeiro",
+      "reconciled": true,
+      "createdAt": "2024-01-12T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-011a",
+          "accountId": "acc-nubank",
+          "amount": -1800,
+          "memo": "Aluguel apt"
+        },
+        {
+          "id": "sp-011b",
+          "accountId": "acc-aluguel",
+          "amount": 1800,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-012",
+      "date": "2024-01-12T12:00:00.000Z",
+      "description": "Condominio Janeiro",
+      "reconciled": true,
+      "createdAt": "2024-01-12T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-012a",
+          "accountId": "acc-nubank",
+          "amount": -450,
+          "memo": null
+        },
+        {
+          "id": "sp-012b",
+          "accountId": "acc-condominio",
+          "amount": 450,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-013",
+      "date": "2024-01-15T12:00:00.000Z",
+      "description": "Conta de Luz Janeiro",
+      "reconciled": true,
+      "createdAt": "2024-01-15T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-013a",
+          "accountId": "acc-nubank",
+          "amount": -185,
+          "memo": "CPFL"
+        },
+        {
+          "id": "sp-013b",
+          "accountId": "acc-luz",
+          "amount": 185,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-014",
+      "date": "2024-01-15T12:00:00.000Z",
+      "description": "Conta de Agua Janeiro",
+      "reconciled": true,
+      "createdAt": "2024-01-15T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-014a",
+          "accountId": "acc-nubank",
+          "amount": -65,
+          "memo": "Sabesp"
+        },
+        {
+          "id": "sp-014b",
+          "accountId": "acc-agua",
+          "amount": 65,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-015",
+      "date": "2024-01-16T12:00:00.000Z",
+      "description": "Internet Janeiro",
+      "reconciled": true,
+      "createdAt": "2024-01-16T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-015a",
+          "accountId": "acc-nubank",
+          "amount": -130,
+          "memo": "Vivo Fibra 300mb"
+        },
+        {
+          "id": "sp-015b",
+          "accountId": "acc-internet",
+          "amount": 130,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-016",
+      "date": "2024-01-16T12:00:00.000Z",
+      "description": "Plano Celular",
+      "reconciled": true,
+      "createdAt": "2024-01-16T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-016a",
+          "accountId": "acc-nubank",
+          "amount": -55,
+          "memo": "Tim controle"
+        },
+        {
+          "id": "sp-016b",
+          "accountId": "acc-celular",
+          "amount": 55,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-017",
+      "date": "2024-01-18T12:00:00.000Z",
+      "description": "Mercado Semanal",
+      "reconciled": false,
+      "createdAt": "2024-01-18T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-017a",
+          "accountId": "acc-cartao-nubank",
+          "amount": -324,
+          "memo": "Extra Hiper"
+        },
+        {
+          "id": "sp-017b",
+          "accountId": "acc-supermercado",
+          "amount": 325,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-018",
+      "date": "2024-01-19T12:00:00.000Z",
+      "description": "Gasolina",
+      "reconciled": false,
+      "createdAt": "2024-01-19T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-018a",
+          "accountId": "acc-cartao-nubank",
+          "amount": -250,
+          "memo": "Posto Shell"
+        },
+        {
+          "id": "sp-018b",
+          "accountId": "acc-combustivel",
+          "amount": 250,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-019",
+      "date": "2024-01-20T12:00:00.000Z",
+      "description": "Academia Smart Fit",
+      "reconciled": false,
+      "createdAt": "2024-01-20T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-019a",
+          "accountId": "acc-nubank",
+          "amount": -100,
+          "memo": "Mensalidade jan"
+        },
+        {
+          "id": "sp-019b",
+          "accountId": "acc-academia",
+          "amount": 100,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-020",
+      "date": "2024-01-20T12:00:00.000Z",
+      "description": "Netflix + Spotify",
+      "reconciled": false,
+      "createdAt": "2024-01-20T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-020a",
+          "accountId": "acc-cartao-nubank",
+          "amount": -56,
+          "memo": "Netflix 39.90 + Spotify 21.90"
+        },
+        {
+          "id": "sp-020b",
+          "accountId": "acc-streaming",
+          "amount": 56,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-021",
+      "date": "2024-01-22T12:00:00.000Z",
+      "description": "Almoco com amigos",
+      "reconciled": false,
+      "createdAt": "2024-01-22T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-021a",
+          "accountId": "acc-cartao-nubank",
+          "amount": -89,
+          "memo": "Outback"
+        },
+        {
+          "id": "sp-021b",
+          "accountId": "acc-restaurantes",
+          "amount": 89,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-022",
+      "date": "2024-01-23T12:00:00.000Z",
+      "description": "iFood Jantar",
+      "reconciled": false,
+      "createdAt": "2024-01-23T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-022a",
+          "accountId": "acc-cartao-nubank",
+          "amount": -46,
+          "memo": "Hamburguer artesanal"
+        },
+        {
+          "id": "sp-022b",
+          "accountId": "acc-ifood",
+          "amount": 46,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-023",
+      "date": "2024-01-24T12:00:00.000Z",
+      "description": "Uber para o trabalho",
+      "reconciled": false,
+      "createdAt": "2024-01-24T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-023a",
+          "accountId": "acc-nubank",
+          "amount": -23,
+          "memo": null
+        },
+        {
+          "id": "sp-023b",
+          "accountId": "acc-uber",
+          "amount": 24,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-024",
+      "date": "2024-01-25T12:00:00.000Z",
+      "description": "Mercado Semanal",
+      "reconciled": false,
+      "createdAt": "2024-01-25T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-024a",
+          "accountId": "acc-cartao-nubank",
+          "amount": -287,
+          "memo": "Carrefour"
+        },
+        {
+          "id": "sp-024b",
+          "accountId": "acc-supermercado",
+          "amount": 287,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-025",
+      "date": "2024-01-26T12:00:00.000Z",
+      "description": "Freelance - Site cliente",
+      "reconciled": false,
+      "createdAt": "2024-01-26T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-025a",
+          "accountId": "acc-inter",
+          "amount": 2500,
+          "memo": "Projeto site empresa X"
+        },
+        {
+          "id": "sp-025b",
+          "accountId": "acc-freelance",
+          "amount": -2500,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-026",
+      "date": "2024-01-27T12:00:00.000Z",
+      "description": "Camiseta nova",
+      "reconciled": false,
+      "createdAt": "2024-01-27T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-026a",
+          "accountId": "acc-cartao-inter",
+          "amount": -150,
+          "memo": "Renner"
+        },
+        {
+          "id": "sp-026b",
+          "accountId": "acc-roupas",
+          "amount": 150,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-027",
+      "date": "2024-01-28T12:00:00.000Z",
+      "description": "Curso Udemy",
+      "reconciled": false,
+      "createdAt": "2024-01-28T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-027a",
+          "accountId": "acc-cartao-nubank",
+          "amount": -28,
+          "memo": "React avancado"
+        },
+        {
+          "id": "sp-027b",
+          "accountId": "acc-educacao",
+          "amount": 28,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-028",
+      "date": "2024-01-29T12:00:00.000Z",
+      "description": "Estacionamento Shopping",
+      "reconciled": false,
+      "createdAt": "2024-01-29T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-028a",
+          "accountId": "acc-nubank",
+          "amount": -15,
+          "memo": null
+        },
+        {
+          "id": "sp-028b",
+          "accountId": "acc-estacionamento",
+          "amount": 15,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-029",
+      "date": "2024-01-30T12:00:00.000Z",
+      "description": "Consulta medica",
+      "reconciled": false,
+      "createdAt": "2024-01-30T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-029a",
+          "accountId": "acc-nubank",
+          "amount": -250,
+          "memo": "Clinica geral"
+        },
+        {
+          "id": "sp-029b",
+          "accountId": "acc-saude",
+          "amount": 250,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-030",
+      "date": "2024-01-31T12:00:00.000Z",
+      "description": "Rendimento Tesouro Selic",
+      "reconciled": false,
+      "createdAt": "2024-01-31T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-030a",
+          "accountId": "acc-tesouro",
+          "amount": 185,
+          "memo": "Rendimento jan"
+        },
+        {
+          "id": "sp-030b",
+          "accountId": "acc-rendimentos",
+          "amount": -185,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-031",
+      "date": "2024-01-31T12:00:00.000Z",
+      "description": "Parcela Financiamento Carro",
+      "reconciled": true,
+      "createdAt": "2024-01-31T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-031a",
+          "accountId": "acc-nubank",
+          "amount": -890,
+          "memo": "Parcela 12/48"
+        },
+        {
+          "id": "sp-031b",
+          "accountId": "acc-financiamento",
+          "amount": 890,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-032",
+      "date": "2024-01-31T12:00:00.000Z",
+      "description": "Transferencia para poupanca",
+      "reconciled": false,
+      "createdAt": "2024-01-31T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-032a",
+          "accountId": "acc-nubank",
+          "amount": -1000,
+          "memo": "Reserva mensal"
+        },
+        {
+          "id": "sp-032b",
+          "accountId": "acc-poupanca",
+          "amount": 1000,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-040",
+      "date": "2024-02-05T12:00:00.000Z",
+      "description": "Salario Fevereiro",
+      "reconciled": true,
+      "createdAt": "2024-02-05T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-040a",
+          "accountId": "acc-nubank",
+          "amount": 7500,
+          "memo": "Salario liquido"
+        },
+        {
+          "id": "sp-040b",
+          "accountId": "acc-salario",
+          "amount": -7500,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-041",
+      "date": "2024-02-07T12:00:00.000Z",
+      "description": "Aluguel Fevereiro",
+      "reconciled": true,
+      "createdAt": "2024-02-07T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-041a",
+          "accountId": "acc-nubank",
+          "amount": -1800,
+          "memo": null
+        },
+        {
+          "id": "sp-041b",
+          "accountId": "acc-aluguel",
+          "amount": 1800,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-042",
+      "date": "2024-02-07T12:00:00.000Z",
+      "description": "Condominio Fevereiro",
+      "reconciled": true,
+      "createdAt": "2024-02-07T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-042a",
+          "accountId": "acc-nubank",
+          "amount": -450,
+          "memo": null
+        },
+        {
+          "id": "sp-042b",
+          "accountId": "acc-condominio",
+          "amount": 450,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-043",
+      "date": "2024-02-10T12:00:00.000Z",
+      "description": "Compra de Bitcoin",
+      "reconciled": false,
+      "createdAt": "2024-02-10T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-043a",
+          "accountId": "acc-inter",
+          "amount": -500,
+          "memo": "BTC via Binance"
+        },
+        {
+          "id": "sp-043b",
+          "accountId": "acc-cripto",
+          "amount": 500,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-044",
+      "date": "2024-02-12T12:00:00.000Z",
+      "description": "Mercado Semanal",
+      "reconciled": false,
+      "createdAt": "2024-02-12T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-044a",
+          "accountId": "acc-cartao-nubank",
+          "amount": -352,
+          "memo": "Assai Atacadista"
+        },
+        {
+          "id": "sp-044b",
+          "accountId": "acc-supermercado",
+          "amount": 352,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-045",
+      "date": "2024-02-14T12:00:00.000Z",
+      "description": "Jantar Dia dos Namorados",
+      "reconciled": false,
+      "createdAt": "2024-02-14T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-045a",
+          "accountId": "acc-cartao-nubank",
+          "amount": -289,
+          "memo": "Restaurante italiano"
+        },
+        {
+          "id": "sp-045b",
+          "accountId": "acc-restaurantes",
+          "amount": 289,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-046",
+      "date": "2024-02-15T12:00:00.000Z",
+      "description": "Conta de Luz Fevereiro",
+      "reconciled": false,
+      "createdAt": "2024-02-15T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-046a",
+          "accountId": "acc-nubank",
+          "amount": -210,
+          "memo": "CPFL"
+        },
+        {
+          "id": "sp-046b",
+          "accountId": "acc-luz",
+          "amount": 210,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-047",
+      "date": "2024-02-16T12:00:00.000Z",
+      "description": "Jogo Steam",
+      "reconciled": false,
+      "createdAt": "2024-02-16T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-047a",
+          "accountId": "acc-cartao-inter",
+          "amount": -125,
+          "memo": "Elden Ring DLC"
+        },
+        {
+          "id": "sp-047b",
+          "accountId": "acc-jogos",
+          "amount": 125,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-048",
+      "date": "2024-02-18T12:00:00.000Z",
+      "description": "Gasolina",
+      "reconciled": false,
+      "createdAt": "2024-02-18T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-048a",
+          "accountId": "acc-nubank",
+          "amount": -220,
+          "memo": "Posto Ipiranga"
+        },
+        {
+          "id": "sp-048b",
+          "accountId": "acc-combustivel",
+          "amount": 220,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-049",
+      "date": "2024-02-20T12:00:00.000Z",
+      "description": "Aporte Tesouro Direto",
+      "reconciled": false,
+      "createdAt": "2024-02-20T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-049a",
+          "accountId": "acc-nubank",
+          "amount": -1000,
+          "memo": "Tesouro IPCA+"
+        },
+        {
+          "id": "sp-049b",
+          "accountId": "acc-tesouro",
+          "amount": 1000,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-050",
+      "date": "2024-02-22T12:00:00.000Z",
+      "description": "Compra Acoes PETR4",
+      "reconciled": false,
+      "createdAt": "2024-02-22T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-050a",
+          "accountId": "acc-inter",
+          "amount": -800,
+          "memo": "100 acoes PETR4"
+        },
+        {
+          "id": "sp-050b",
+          "accountId": "acc-acoes",
+          "amount": 800,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-051",
+      "date": "2024-02-25T12:00:00.000Z",
+      "description": "Freelance - App mobile",
+      "reconciled": false,
+      "createdAt": "2024-02-25T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-051a",
+          "accountId": "acc-inter",
+          "amount": 3500,
+          "memo": "App React Native"
+        },
+        {
+          "id": "sp-051b",
+          "accountId": "acc-freelance",
+          "amount": -3500,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-052",
+      "date": "2024-02-27T12:00:00.000Z",
+      "description": "Farmacia",
+      "reconciled": false,
+      "createdAt": "2024-02-27T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-052a",
+          "accountId": "acc-cartao-nubank",
+          "amount": -87,
+          "memo": "Drogasil remedios"
+        },
+        {
+          "id": "sp-052b",
+          "accountId": "acc-saude",
+          "amount": 87,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-053",
+      "date": "2024-02-28T12:00:00.000Z",
+      "description": "Parcela Financiamento Carro",
+      "reconciled": true,
+      "createdAt": "2024-02-28T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-053a",
+          "accountId": "acc-nubank",
+          "amount": -890,
+          "memo": "Parcela 13/48"
+        },
+        {
+          "id": "sp-053b",
+          "accountId": "acc-financiamento",
+          "amount": 890,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-054",
+      "date": "2024-02-28T12:00:00.000Z",
+      "description": "Rendimento Tesouro Selic",
+      "reconciled": false,
+      "createdAt": "2024-02-28T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-054a",
+          "accountId": "acc-tesouro",
+          "amount": 192,
+          "memo": "Rendimento fev"
+        },
+        {
+          "id": "sp-054b",
+          "accountId": "acc-rendimentos",
+          "amount": -192,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-055",
+      "date": "2024-02-28T12:00:00.000Z",
+      "description": "Transferencia para poupanca",
+      "reconciled": false,
+      "createdAt": "2024-02-28T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-055a",
+          "accountId": "acc-nubank",
+          "amount": -1000,
+          "memo": "Reserva mensal"
+        },
+        {
+          "id": "sp-055b",
+          "accountId": "acc-poupanca",
+          "amount": 1000,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-060",
+      "date": "2024-03-05T12:00:00.000Z",
+      "description": "Salario Marco",
+      "reconciled": true,
+      "createdAt": "2024-03-05T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-060a",
+          "accountId": "acc-nubank",
+          "amount": 7500,
+          "memo": "Salario liquido"
+        },
+        {
+          "id": "sp-060b",
+          "accountId": "acc-salario",
+          "amount": -7500,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-061",
+      "date": "2024-03-08T12:00:00.000Z",
+      "description": "Viagem fim de semana - Campos do Jordao",
+      "reconciled": false,
+      "createdAt": "2024-03-08T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-061a",
+          "accountId": "acc-cartao-nubank",
+          "amount": -850,
+          "memo": "Hotel + alimentacao"
+        },
+        {
+          "id": "sp-061b",
+          "accountId": "acc-viagens",
+          "amount": 850,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-062",
+      "date": "2024-03-10T12:00:00.000Z",
+      "description": "Aluguel Marco",
+      "reconciled": true,
+      "createdAt": "2024-03-10T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-062a",
+          "accountId": "acc-nubank",
+          "amount": -1800,
+          "memo": null
+        },
+        {
+          "id": "sp-062b",
+          "accountId": "acc-aluguel",
+          "amount": 1800,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-063",
+      "date": "2024-03-12T12:00:00.000Z",
+      "description": "Mercado Semanal",
+      "reconciled": false,
+      "createdAt": "2024-03-12T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-063a",
+          "accountId": "acc-cartao-nubank",
+          "amount": -310,
+          "memo": "Pao de Acucar"
+        },
+        {
+          "id": "sp-063b",
+          "accountId": "acc-supermercado",
+          "amount": 310,
+          "memo": null
+        }
+      ]
+    },
+    {
+      "id": "tx-064",
+      "date": "2024-03-15T12:00:00.000Z",
+      "description": "Compra diversa - Amazon",
+      "reconciled": false,
+      "createdAt": "2024-03-15T12:00:00.000Z",
+      "splits": [
+        {
+          "id": "sp-064a",
+          "accountId": "acc-cartao-inter",
+          "amount": -199,
+          "memo": "Fone Bluetooth JBL"
+        },
+        {
+          "id": "sp-064b",
+          "accountId": "acc-diversos",
+          "amount": 199,
+          "memo": null
+        }
+      ]
+    }
+  ]
+}

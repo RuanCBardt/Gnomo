@@ -2,18 +2,18 @@
   <div class="space-y-6">
     <!-- Header -->
     <div>
-      <h1 class="text-2xl font-bold text-[#e8e8f0]">{{ t.reports.title }}</h1>
-      <p class="text-sm text-[#6a6a8a] mt-0.5">{{ t.reports.subtitle }}</p>
+      <h1 class="text-xl md:text-2xl font-bold text-[#e8e8f0]">{{ t.reports.title }}</h1>
+      <p class="text-xs md:text-sm text-[#6a6a8a] mt-0.5">{{ t.reports.subtitle }}</p>
     </div>
 
     <!-- Report Tabs -->
-    <div class="flex gap-2 flex-wrap">
+    <div class="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide flex-wrap md:flex-nowrap">
       <button
         v-for="tab in tabs"
         :key="tab.value"
         @click="activeTab = tab.value"
         :class="[
-          'flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
+          'flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap shrink-0',
           activeTab === tab.value
             ? 'shadow-sm'
             : 'text-[#6a6a8a] hover:text-[#a0a0c0] hover:bg-[#1a1a2e]'

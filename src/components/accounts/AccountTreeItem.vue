@@ -3,7 +3,7 @@
     <!-- Account row -->
     <div
       :class="[
-        'flex items-center px-6 py-3 group transition-all duration-200 hover:bg-[#1a1a2e]/50 cursor-pointer',
+        'flex items-center px-3 md:px-6 py-3 group transition-all duration-200 hover:bg-[#1a1a2e]/50 cursor-pointer',
       ]"
       @click="handleClick"
     >
@@ -49,14 +49,14 @@
         </span>
         <!-- Balance -->
         <span :class="[
-          'text-sm font-semibold tabular-nums text-right w-32',
+          'text-xs md:text-sm font-semibold tabular-nums text-right w-24 md:w-32',
           balance >= 0 ? 'text-[#22c55e]' : 'text-[#ef4444]'
         ]">
           {{ formatCurrency(balance, defaultCurrency) }}
         </span>
 
         <!-- Actions -->
-        <div class="w-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <div class="w-7 flex items-center justify-center md:opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <button
             v-if="canDelete"
             @click.stop="handleDelete"

@@ -1,10 +1,10 @@
 <template>
   <div class="space-y-6">
     <!-- Header -->
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div>
-        <h1 class="text-2xl font-bold text-[#e8e8f0]">{{ t.accounts.title }}</h1>
-        <p class="text-sm text-[#6a6a8a] mt-0.5">{{ t.accounts.subtitle }}</p>
+        <h1 class="text-xl md:text-2xl font-bold text-[#e8e8f0]">{{ t.accounts.title }}</h1>
+        <p class="text-xs md:text-sm text-[#6a6a8a] mt-0.5">{{ t.accounts.subtitle }}</p>
       </div>
       <button
         @click="showAddModal = true"
@@ -19,13 +19,13 @@
     </div>
 
     <!-- Account Types Tabs -->
-    <div class="flex gap-2">
+    <div class="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
       <button
         v-for="tab in tabs"
         :key="tab.value"
         @click="handleTabClick(tab.value)"
         :class="[
-          'px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200',
+          'px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap shrink-0',
           activeTab === tab.value
             ? 'bg-[#7c5cfc]/15 text-[#7c5cfc] shadow-sm shadow-[#7c5cfc]/10'
             : 'text-[#6a6a8a] hover:text-[#a0a0c0] hover:bg-[#1a1a2e]'

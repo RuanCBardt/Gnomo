@@ -2,8 +2,8 @@
   <div class="space-y-6">
     <!-- Header -->
     <div>
-      <h1 class="text-2xl font-bold text-[#e8e8f0]">{{ t.settings.title }}</h1>
-      <p class="text-sm text-[#6a6a8a] mt-0.5">{{ t.settings.subtitle }}</p>
+      <h1 class="text-xl md:text-2xl font-bold text-[#e8e8f0]">{{ t.settings.title }}</h1>
+      <p class="text-xs md:text-sm text-[#6a6a8a] mt-0.5">{{ t.settings.subtitle }}</p>
     </div>
 
     <!-- Language -->
@@ -53,7 +53,7 @@
         <h2 class="text-sm font-semibold text-[#e8e8f0]">{{ t.settings.data }}</h2>
         <p class="text-xs text-[#6a6a8a] mt-0.5">{{ t.settings.dataDesc }}</p>
       </div>
-      <div class="px-6 py-4 flex items-center gap-4">
+      <div class="px-6 py-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
         <button
           @click="exportData"
           class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium

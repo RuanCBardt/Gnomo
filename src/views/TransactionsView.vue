@@ -1,17 +1,17 @@
 <template>
   <div class="space-y-6">
     <!-- Header -->
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div>
-        <h1 class="text-2xl font-bold text-[#e8e8f0]">{{ t.tx.title }}</h1>
-        <p class="text-sm text-[#6a6a8a] mt-0.5">{{ t.tx.subtitle }}</p>
+        <h1 class="text-xl md:text-2xl font-bold text-[#e8e8f0]">{{ t.tx.title }}</h1>
+        <p class="text-xs md:text-sm text-[#6a6a8a] mt-0.5">{{ t.tx.subtitle }}</p>
       </div>
       <button
         @click="ui.openTransactionModal()"
-        class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
+        class="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
                bg-gradient-to-r from-[#7c5cfc] to-[#5c8cfc] text-white
                hover:shadow-lg hover:shadow-[#7c5cfc]/30 hover:scale-[1.02]
-               active:scale-[0.98] transition-all duration-200"
+               active:scale-[0.98] transition-all duration-200 w-full sm:w-auto"
       >
         <Plus class="w-4 h-4" />
         {{ t.tx.newTransaction }}
@@ -19,22 +19,22 @@
     </div>
 
     <!-- Filters -->
-    <div class="flex flex-wrap items-center gap-3">
-      <div class="relative">
+    <div class="flex flex-col md:flex-row md:flex-wrap md:items-center gap-3">
+      <div class="relative w-full md:w-auto">
         <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6a6a8a]" />
         <input
           v-model="search"
           type="text"
           :placeholder="t.tx.filterPlaceholder"
           class="pl-10 pr-4 py-2 rounded-xl bg-[#12121a] border border-[#2a2a4a]/60 text-sm text-[#e8e8f0] placeholder:text-[#6a6a8a]
-                 focus:outline-none focus:border-[#7c5cfc]/50 focus:ring-1 focus:ring-[#7c5cfc]/30 transition-all w-64"
+                 focus:outline-none focus:border-[#7c5cfc]/50 focus:ring-1 focus:ring-[#7c5cfc]/30 transition-all w-full md:w-64"
         />
       </div>
 
       <select
         v-model="filterAccount"
         class="px-3 py-2 rounded-xl bg-[#12121a] border border-[#2a2a4a]/60 text-sm text-[#e8e8f0]
-               focus:outline-none focus:border-[#7c5cfc]/50 transition-all appearance-none"
+               focus:outline-none focus:border-[#7c5cfc]/50 transition-all appearance-none w-full md:w-auto"
       >
         <option value="">{{ t.tx.allAccounts }}</option>
         <optgroup v-for="type in accountTypes" :key="type.value" :label="type.label">
@@ -44,27 +44,77 @@
         </optgroup>
       </select>
 
-      <input
-        v-model="dateFrom"
-        type="date"
-        class="px-3 py-2 rounded-xl bg-[#12121a] border border-[#2a2a4a]/60 text-sm text-[#e8e8f0]
-               focus:outline-none focus:border-[#7c5cfc]/50 transition-all"
-      />
-      <span class="text-[#6a6a8a] text-xs">{{ t.common.to }}</span>
-      <input
-        v-model="dateTo"
-        type="date"
-        class="px-3 py-2 rounded-xl bg-[#12121a] border border-[#2a2a4a]/60 text-sm text-[#e8e8f0]
-               focus:outline-none focus:border-[#7c5cfc]/50 transition-all"
-      />
+      <div class="flex items-center gap-2">
+        <input
+          v-model="dateFrom"
+          type="date"
+          class="flex-1 md:flex-none px-3 py-2 rounded-xl bg-[#12121a] border border-[#2a2a4a]/60 text-sm text-[#e8e8f0]
+                 focus:outline-none focus:border-[#7c5cfc]/50 transition-all"
+        />
+        <span class="text-[#6a6a8a] text-xs">{{ t.common.to }}</span>
+        <input
+          v-model="dateTo"
+          type="date"
+          class="flex-1 md:flex-none px-3 py-2 rounded-xl bg-[#12121a] border border-[#2a2a4a]/60 text-sm text-[#e8e8f0]
+                 focus:outline-none focus:border-[#7c5cfc]/50 transition-all"
+        />
+      </div>
 
-      <div class="ml-auto text-xs text-[#6a6a8a]">
+      <div class="md:ml-auto text-xs text-[#6a6a8a]">
         {{ filteredTransactions.length }} {{ t.common.transactions }}
       </div>
     </div>
 
     <!-- Table -->
-    <div class="bg-[#12121a] border border-[#2a2a4a]/60 rounded-2xl overflow-hidden">
+    <!-- Mobile Card Layout -->
+    <div class="md:hidden space-y-2">
+      <div
+        v-for="tx in filteredTransactions"
+        :key="'m-' + tx.id"
+        class="bg-[#12121a] border border-[#2a2a4a]/60 rounded-xl p-4 active:bg-[#1a1a2e]/60 transition-colors duration-150"
+        @click="ui.openTransactionModal(tx.id)"
+      >
+        <div class="flex items-start justify-between gap-3">
+          <div class="min-w-0 flex-1">
+            <p class="text-sm font-medium text-[#e8e8f0] truncate">{{ tx.description }}</p>
+            <p class="text-xs text-[#6a6a8a] mt-0.5">{{ formatDate(tx.date) }}</p>
+            <div class="flex flex-wrap gap-1.5 mt-1.5">
+              <span
+                v-for="split in tx.splits"
+                :key="split.id"
+                class="inline-flex items-center gap-1 text-[10px] text-[#a0a0c0]"
+              >
+                <div class="w-1.5 h-1.5 rounded-full shrink-0" :style="{ backgroundColor: getAccountColor(split.accountId) }"></div>
+                {{ getAccountName(split.accountId) }}
+              </span>
+            </div>
+          </div>
+          <div class="text-right shrink-0">
+            <p v-if="tx.splits[0]" :class="['text-sm font-semibold tabular-nums', tx.splits[0].amount > 0 ? 'text-[#22c55e]' : 'text-[#ef4444]']">
+              {{ formatCurrency(Math.abs(tx.splits[0].amount), getAccountCurrency(tx.splits[0].accountId)) }}
+            </p>
+            <CheckCircle2 v-if="tx.reconciled" class="w-3.5 h-3.5 text-[#22c55e] mt-1 ml-auto" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div v-if="filteredTransactions.length === 0" class="py-16 text-center">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#1a1a2e] flex items-center justify-center">
+          <ArrowLeftRight class="w-8 h-8 text-[#6a6a8a]" />
+        </div>
+        <p class="text-[#6a6a8a]">{{ t.tx.noTransactions }}</p>
+        <button
+          @click="ui.openTransactionModal()"
+          class="mt-3 text-sm text-[#7c5cfc] hover:text-[#5c8cfc] transition-colors"
+        >
+          {{ t.tx.createFirst }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Desktop Table -->
+    <div class="hidden md:block bg-[#12121a] border border-[#2a2a4a]/60 rounded-2xl overflow-hidden">
       <!-- Table Header -->
       <div class="grid grid-cols-12 gap-4 px-6 py-3 border-b border-[#2a2a4a]/40 text-xs font-semibold text-[#6a6a8a] uppercase tracking-wider">
         <div class="col-span-2">{{ t.common.date }}</div>
@@ -89,44 +139,28 @@
             ]"
             @click="ui.openTransactionModal(tx.id)"
           >
-            <!-- Date (only on first split) -->
             <div class="col-span-2">
               <span v-if="idx === 0" class="text-[#a0a0c0]">{{ formatDate(tx.date) }}</span>
             </div>
-
-            <!-- Description (only on first split) -->
             <div class="col-span-3">
               <span v-if="idx === 0" class="text-[#e8e8f0] font-medium">{{ tx.description }}</span>
             </div>
-
-            <!-- Account -->
             <div class="col-span-3 flex items-center gap-2">
-              <div
-                class="w-1.5 h-1.5 rounded-full shrink-0"
-                :style="{ backgroundColor: getAccountColor(split.accountId) }"
-              ></div>
+              <div class="w-1.5 h-1.5 rounded-full shrink-0" :style="{ backgroundColor: getAccountColor(split.accountId) }"></div>
               <span class="text-[#a0a0c0] truncate">{{ getAccountName(split.accountId) }}</span>
             </div>
-
-            <!-- Debit -->
             <div class="col-span-1 text-right tabular-nums">
               <span v-if="split.amount > 0" class="text-[#22c55e]">{{ formatCurrency(split.amount, getAccountCurrency(split.accountId)) }}</span>
             </div>
-
-            <!-- Credit -->
             <div class="col-span-1 text-right tabular-nums">
               <span v-if="split.amount < 0" class="text-[#ef4444]">{{ formatCurrency(-split.amount, getAccountCurrency(split.accountId)) }}</span>
             </div>
-
-            <!-- Reconciled (only first) -->
             <div class="col-span-1 flex justify-center">
               <span v-if="idx === 0">
                 <CheckCircle2 v-if="tx.reconciled" class="w-4 h-4 text-[#22c55e]" />
                 <Circle v-else class="w-4 h-4 text-[#6a6a8a]" />
               </span>
             </div>
-
-            <!-- Actions (only first) -->
             <div class="col-span-1 flex justify-end">
               <button
                 v-if="idx === 0"

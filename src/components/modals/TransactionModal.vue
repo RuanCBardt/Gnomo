@@ -1,14 +1,15 @@
 <template>
   <Teleport to="body">
     <transition name="fade">
-      <div v-if="ui.transactionModalOpen" class="fixed inset-0 z-[60] flex items-center justify-center p-4">
+      <div v-if="ui.transactionModalOpen" class="fixed inset-0 z-[60] flex items-end md:items-center justify-center md:p-4">
         <!-- Backdrop -->
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="ui.closeTransactionModal()"></div>
 
         <!-- Modal -->
         <div ref="modalContainerRef" :class="[
-          'relative bg-[#12121a] border border-[#2a2a4a] rounded-2xl shadow-2xl shadow-black/50 overflow-y-auto transition-all duration-300 w-full',
-          prefillAccount ? 'max-w-5xl max-h-[92vh]' : 'max-w-4xl max-h-[90vh]'
+          'relative bg-[#12121a] border-t md:border border-[#2a2a4a] md:rounded-2xl shadow-2xl shadow-black/50 overflow-y-auto transition-all duration-300 w-full',
+          prefillAccount ? 'max-h-[95vh] md:max-w-5xl md:max-h-[92vh]' : 'max-h-[95vh] md:max-w-4xl md:max-h-[90vh]',
+          'rounded-t-2xl md:rounded-2xl'
         ]">
 
           <!-- ===== EMBEDDED LEDGER (when creating from an account) ===== -->
@@ -112,7 +113,7 @@
           <!-- Form -->
           <form @submit.prevent="handleSubmit" class="p-6 space-y-5">
             <!-- Date & Description Row -->
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label class="block text-xs font-medium text-[#a0a0c0] mb-1.5">{{ t.common.date }}</label>
                 <input
@@ -124,7 +125,7 @@
                          transition-all duration-200"
                 />
               </div>
-              <div class="col-span-2">
+              <div class="md:col-span-2">
                 <label class="block text-xs font-medium text-[#a0a0c0] mb-1.5">{{ t.common.description }}</label>
                 <input
                   v-model="form.description"
@@ -139,12 +140,12 @@
             </div>
 
             <!-- ===== VISUAL FLOW AREA ===== -->
-            <div class="relative grid grid-cols-[1fr_auto_1fr] gap-0 items-start min-h-[160px]">
+            <div class="relative flex flex-col md:grid md:grid-cols-[1fr_auto_1fr] gap-4 md:gap-0 md:items-start min-h-0 md:min-h-[160px]">
               <!-- Subtle connecting background -->
               <div class="absolute inset-y-0 left-1/4 right-1/4 bg-gradient-to-r from-transparent via-[#7c5cfc]/[0.03] to-transparent pointer-events-none rounded-2xl"></div>
 
               <!-- LEFT: Sources (De onde sai) -->
-              <div class="pr-3 min-w-0">
+              <div class="md:pr-3 min-w-0">
                 <div class="flex items-center gap-2 mb-3">
                   <div class="w-2 h-2 rounded-full bg-[#ef4444] animate-pulse"></div>
                   <span class="text-[10px] font-bold uppercase tracking-widest text-[#ef4444]/80">{{ t.tx.flowFrom }}</span>
@@ -227,7 +228,7 @@
               </div>
 
               <!-- CENTER: Animated Arrow + Amount -->
-              <div class="flex flex-col items-center justify-center gap-2 px-2 pt-7">
+              <div class="flex flex-col items-center justify-center gap-2 px-2 py-2 md:pt-7">
                 <!-- Amount in simple mode -->
                 <div v-if="isSimpleMode" class="flex flex-col items-center gap-1">
                   <span class="text-[10px] font-bold text-[#6a6a8a]">{{ ui.defaultCurrency }}</span>
@@ -244,7 +245,7 @@
                 </div>
 
                 <!-- Animated arrow with flowing particles -->
-                <div class="arrow-container relative w-16 h-12 cursor-pointer" @click="swapSourcesAndDestinations" :title="t.tx.flowFrom + ' ↔ ' + t.tx.flowTo">
+                <div class="arrow-container relative w-16 h-8 md:h-12 cursor-pointer" @click="swapSourcesAndDestinations" :title="t.tx.flowFrom + ' ↔ ' + t.tx.flowTo">
                   <svg viewBox="0 0 64 48" class="w-full h-full">
                     <defs>
                       <linearGradient id="flowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -279,7 +280,7 @@
               </div>
 
               <!-- RIGHT: Destinations (Para onde vai) -->
-              <div class="pl-3 min-w-0">
+              <div class="md:pl-3 min-w-0">
                 <div class="flex items-center gap-2 mb-3">
                   <div class="w-2 h-2 rounded-full bg-[#22c55e] animate-pulse"></div>
                   <span class="text-[10px] font-bold uppercase tracking-widest text-[#22c55e]/80">{{ t.tx.flowTo }}</span>
@@ -396,7 +397,7 @@
             </div>
 
             <!-- Actions -->
-            <div class="flex items-center justify-end gap-3 pt-2">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-2">
               <button
                 type="button"
                 @click="ui.closeTransactionModal()"

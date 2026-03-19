@@ -1,12 +1,12 @@
 <template>
   <div class="space-y-6">
     <!-- Page Header -->
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
       <div>
-        <h1 class="text-2xl font-bold text-[#e8e8f0]">{{ t.dashboard.title }}</h1>
-        <p class="text-sm text-[#6a6a8a] mt-0.5">{{ t.dashboard.subtitle }}</p>
+        <h1 class="text-xl md:text-2xl font-bold text-[#e8e8f0]">{{ t.dashboard.title }}</h1>
+        <p class="text-xs md:text-sm text-[#6a6a8a] mt-0.5">{{ t.dashboard.subtitle }}</p>
       </div>
-      <div class="text-sm text-[#6a6a8a]">
+      <div class="text-xs md:text-sm text-[#6a6a8a]">
         {{ currentDate }}
       </div>
     </div>
@@ -55,15 +55,15 @@
         <div
           v-for="tx in recentTransactions"
           :key="tx.id"
-          class="flex items-center justify-between px-6 py-3.5 hover:bg-[#1a1a2e]/50 transition-all duration-200 cursor-pointer group"
+          class="flex items-center justify-between px-4 md:px-6 py-3 md:py-3.5 hover:bg-[#1a1a2e]/50 transition-all duration-200 cursor-pointer group"
           @click="ui.openTransactionModal(tx.id)"
         >
           <div class="flex items-center gap-4">
             <div :class="[
-              'w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-110',
+              'w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-110',
               getTxIconBg(tx)
             ]">
-              <component :is="getTxIcon(tx)" class="w-5 h-5 text-white" />
+              <component :is="getTxIcon(tx)" class="w-4 h-4 md:w-5 md:h-5 text-white" />
             </div>
             <div>
               <p class="text-sm font-medium text-[#e8e8f0]">{{ tx.description }}</p>

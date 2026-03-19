@@ -26,13 +26,17 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
     min-height: 100vh;
+    min-height: 100dvh;
     overflow-x: hidden;
     background-color: var(--color-surface);
     color: var(--color-text);
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* Scrollbar */
@@ -72,6 +76,14 @@
     transform: translateY(-2px);
     border-color: var(--color-border-hover);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(124, 92, 252, 0.15);
+  }
+
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
 
