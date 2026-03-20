@@ -6,6 +6,7 @@
         'flex items-center px-3 md:px-6 py-3 group transition-all duration-200 hover:bg-[#1a1a2e]/50 cursor-pointer',
       ]"
       @click="handleClick"
+      @contextmenu.prevent="openContextMenu"
     >
       <div class="flex items-center gap-3 min-w-0 flex-1" :style="{ paddingLeft: `${depth * 24}px` }">
         <!-- Expand arrow -->
@@ -79,23 +80,76 @@
           :force-expanded="props.forceExpanded"
           :expand-generation="props.expandGeneration"
           @open-ledger="(acc: Account) => emit('open-ledger', acc)"
+          @create-subaccount="(acc: Account) => emit('create-subaccount', acc)"
+          @edit-account="(acc: Account) => emit('edit-account', acc)"
         />
       </div>
     </transition>
+
+    <!-- Context menu (teleported to body so it overlays everything) -->
+    <Teleport to="body">
+      <template v-if="menuVisible">
+        <!-- Backdrop: captures outside clicks to close -->
+        <div
+          class="fixed inset-0 z-[990]"
+          @click="closeMenu"
+          @contextmenu.prevent="closeMenu"
+        ></div>
+
+        <!-- Menu -->
+        <div
+          class="fixed z-[991] bg-[#1a1a2e] border border-[#2a2a4a] rounded-xl shadow-2xl shadow-black/60 py-1 min-w-[175px]"
+          :style="menuStyle"
+        >
+          <!-- Create sub-account -->
+          <button
+            class="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-[#a0a0c0] hover:text-[#e8e8f0] hover:bg-[#7c5cfc]/10 transition-colors text-left"
+            @click="handleCreateSubaccount"
+          >
+            <FolderPlus class="w-4 h-4 shrink-0" />
+            {{ t.accounts.newSubAccount }}
+          </button>
+
+          <!-- Edit -->
+          <button
+            class="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-[#a0a0c0] hover:text-[#e8e8f0] hover:bg-[#7c5cfc]/10 transition-colors text-left"
+            @click="handleEdit"
+          >
+            <Pencil class="w-4 h-4 shrink-0" />
+            {{ t.accounts.editAccount }}
+          </button>
+
+          <!-- Divider + Delete (only when deletable) -->
+          <template v-if="canDelete">
+            <div class="h-px bg-[#2a2a4a] mx-2 my-1"></div>
+            <button
+              class="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-[#ef4444] hover:bg-[#ef4444]/10 transition-colors text-left"
+              @click="handleDeleteFromMenu"
+            >
+              <Trash2 class="w-4 h-4 shrink-0" />
+              {{ t.common.delete }}
+            </button>
+          </template>
+        </div>
+      </template>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, reactive } from 'vue'
 import { useAccountStore } from '@/stores/accounts'
 import { useUIStore } from '@/stores/ui'
 import { formatCurrency } from '@/utils/accounting'
 import { ACCOUNT_TYPE_COLORS } from '@/types'
 import type { Account, AccountType } from '@/types'
-import { ChevronRight, Trash2 } from 'lucide-vue-next'
+import { ChevronRight, Trash2, FolderPlus, Pencil } from 'lucide-vue-next'
 import { useI18n } from '@/i18n'
 
 const { t } = useI18n()
+
+// Module-level shared state: only one context menu visible at a time
+const ctxMenu = reactive({ id: null as string | null, x: 0, y: 0 })
 
 const props = defineProps<{
   account: Account
@@ -106,6 +160,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   'open-ledger': [account: Account]
+  'create-subaccount': [account: Account]
+  'edit-account': [account: Account]
 }>()
 
 const accountStore = useAccountStore()
@@ -145,6 +201,46 @@ function handleClick() {
     emit('open-ledger', props.account)
   } else if (hasChildren.value) {
     expanded.value = !expanded.value
+  }
+}
+
+// ── Context menu ────────────────────────────────────────────────────
+const menuVisible = computed(() => ctxMenu.id === props.account.id)
+
+const menuStyle = computed(() => {
+  const menuW = 180
+  const menuH = canDelete.value ? 128 : 90
+  const vw = typeof window !== 'undefined' ? window.innerWidth : 1024
+  const vh = typeof window !== 'undefined' ? window.innerHeight : 768
+  const left = ctxMenu.x + menuW > vw ? ctxMenu.x - menuW : ctxMenu.x
+  const top  = ctxMenu.y + menuH > vh ? ctxMenu.y - menuH : ctxMenu.y
+  return { left: left + 'px', top: top + 'px' }
+})
+
+function openContextMenu(event: MouseEvent) {
+  ctxMenu.id = props.account.id
+  ctxMenu.x = event.clientX
+  ctxMenu.y = event.clientY
+}
+
+function closeMenu() {
+  ctxMenu.id = null
+}
+
+function handleCreateSubaccount() {
+  closeMenu()
+  emit('create-subaccount', props.account)
+}
+
+function handleEdit() {
+  closeMenu()
+  emit('edit-account', props.account)
+}
+
+function handleDeleteFromMenu() {
+  closeMenu()
+  if (confirm(t.value.accounts.confirmDelete.replace('{name}', displayName.value))) {
+    accountStore.deleteAccount(props.account.id)
   }
 }
 

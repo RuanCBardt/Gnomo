@@ -80,6 +80,9 @@ export const pt = {
     confirmDelete: 'Deseja realmente excluir a conta "{name}"?',
     noMovements: 'Nenhuma movimentação nesta conta',
     counterparty: 'Contrapartida',
+    newSubAccount: 'Nova Subconta',
+    editAccount: 'Editar Conta',
+    saveChanges: 'Salvar Alterações',
   },
 
   // Transactions

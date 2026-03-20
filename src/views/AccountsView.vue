@@ -46,6 +46,8 @@
           :force-expanded="treeExpandedState"
           :expand-generation="treeGeneration"
           @open-ledger="openLedger"
+          @create-subaccount="openAddModalWithParent"
+          @edit-account="openEditModal"
         />
       </div>
     </div>
@@ -131,6 +133,64 @@
         </div>
       </transition>
     </Teleport>
+
+    <!-- Edit Account Modal -->
+    <Teleport to="body">
+      <transition name="fade">
+        <div v-if="showEditModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="showEditModal = false"></div>
+          <div class="relative w-full max-w-lg bg-[#12121a] border border-[#2a2a4a] rounded-2xl shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#2a2a4a]/60">
+              <h2 class="text-lg font-semibold text-[#e8e8f0]">{{ t.accounts.editAccount }}</h2>
+              <button @click="showEditModal = false" class="p-1.5 rounded-lg text-[#6a6a8a] hover:text-[#e8e8f0] hover:bg-[#1a1a2e] transition-all">
+                <X class="w-5 h-5" />
+              </button>
+            </div>
+            <form @submit.prevent="handleEditAccount" class="p-6 space-y-4">
+              <div>
+                <label class="block text-xs font-medium text-[#a0a0c0] mb-1.5">{{ t.accounts.name }}</label>
+                <input v-model="editAccount.name" type="text" required
+                  class="w-full px-3 py-2 rounded-xl bg-[#0a0a0f] border border-[#2a2a4a] text-sm text-[#e8e8f0]
+                         focus:outline-none focus:border-[#7c5cfc]/50 focus:ring-1 focus:ring-[#7c5cfc]/30 transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-[#a0a0c0] mb-1.5">{{ t.common.description }}</label>
+                <input v-model="editAccount.description" type="text"
+                  class="w-full px-3 py-2 rounded-xl bg-[#0a0a0f] border border-[#2a2a4a] text-sm text-[#e8e8f0]
+                         focus:outline-none focus:border-[#7c5cfc]/50 transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-[#a0a0c0] mb-1.5">{{ t.accounts.currency }}</label>
+                <select v-model="editAccount.currency"
+                  class="w-full px-3 py-2 rounded-xl bg-[#0a0a0f] border border-[#2a2a4a] text-sm text-[#e8e8f0]
+                         focus:outline-none focus:border-[#7c5cfc]/50 transition-all appearance-none">
+                  <option v-for="c in CURRENCIES" :key="c.code" :value="c.code">
+                    {{ c.symbol }} {{ c.code }} — {{ (t.currencies as any)[c.code] || c.name }}
+                  </option>
+                </select>
+              </div>
+              <div class="flex items-center gap-3">
+                <label class="flex items-center gap-2 text-sm text-[#a0a0c0] cursor-pointer">
+                  <input v-model="editAccount.placeholder" type="checkbox" class="rounded border-[#2a2a4a] bg-[#0a0a0f] text-[#7c5cfc] focus:ring-[#7c5cfc]" />
+                  {{ t.accounts.groupAccount }}
+                </label>
+              </div>
+              <div class="flex justify-end gap-3 pt-2">
+                <button type="button" @click="showEditModal = false"
+                  class="px-4 py-2 rounded-xl text-sm text-[#a0a0c0] hover:text-[#e8e8f0] hover:bg-[#1a1a2e] transition-all">
+                  {{ t.common.cancel }}
+                </button>
+                <button type="submit"
+                  class="px-6 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#7c5cfc] to-[#5c8cfc] text-white
+                         hover:shadow-lg hover:shadow-[#7c5cfc]/30 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                  {{ t.accounts.saveChanges }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </transition>
+    </Teleport>
     <!-- Account Ledger Modal (no longer used - unified view in TransactionModal) -->
   </div>
 </template>
@@ -151,6 +211,14 @@ const { t } = useI18n()
 
 const activeTab = ref<AccountType | 'all'>('all')
 const showAddModal = ref(false)
+const showEditModal = ref(false)
+const editingAccountId = ref<string | null>(null)
+const editAccount = ref({
+  name: '',
+  description: '',
+  currency: ui.defaultCurrency,
+  placeholder: false,
+})
 const treeExpandedState = ref(false)
 const treeGeneration = ref(0)
 
@@ -169,6 +237,41 @@ function handleTabClick(tab: AccountType | 'all') {
 
 function openLedger(account: Account) {
   ui.openTransactionModal(undefined, account.id)
+}
+
+function openAddModalWithParent(parent: Account) {
+  newAccount.value = {
+    name: '',
+    type: parent.type,
+    parentId: parent.id,
+    description: '',
+    placeholder: false,
+    currency: parent.currency || ui.defaultCurrency,
+  }
+  showAddModal.value = true
+}
+
+function openEditModal(account: Account) {
+  editingAccountId.value = account.id
+  editAccount.value = {
+    name: account.name,
+    description: account.description ?? '',
+    currency: account.currency,
+    placeholder: account.placeholder,
+  }
+  showEditModal.value = true
+}
+
+async function handleEditAccount() {
+  if (!editingAccountId.value) return
+  await accountStore.updateAccount(editingAccountId.value, {
+    name: editAccount.value.name,
+    description: editAccount.value.description,
+    currency: editAccount.value.currency,
+    placeholder: editAccount.value.placeholder,
+  })
+  showEditModal.value = false
+  editingAccountId.value = null
 }
 
 const tabs = computed<{ value: AccountType | 'all'; label: string }[]>(() => [

@@ -82,6 +82,9 @@ export const en: TranslationKeys = {
     confirmDelete: 'Are you sure you want to delete the account "{name}"?',
     noMovements: 'No transactions in this account',
     counterparty: 'Counterparty',
+    newSubAccount: 'New Sub-account',
+    editAccount: 'Edit Account',
+    saveChanges: 'Save Changes',
   },
 
   // Transactions
