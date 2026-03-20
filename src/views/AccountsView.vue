@@ -169,6 +169,16 @@
                   </option>
                 </select>
               </div>
+              <div>
+                <label class="block text-xs font-medium text-[#a0a0c0] mb-1.5">{{ t.accounts.parentAccount }}</label>
+                <select v-model="editAccount.parentId"
+                  class="w-full px-3 py-2 rounded-xl bg-[#0a0a0f] border border-[#2a2a4a] text-sm text-[#e8e8f0]
+                         focus:outline-none focus:border-[#7c5cfc]/50 transition-all appearance-none">
+                  <option v-for="acc in editParentOptions" :key="acc.id" :value="acc.id">
+                    {{ accountStore.getFullPath(acc.id, typeLabels) }}
+                  </option>
+                </select>
+              </div>
               <div class="flex items-center gap-3">
                 <label class="flex items-center gap-2 text-sm text-[#a0a0c0] cursor-pointer">
                   <input v-model="editAccount.placeholder" type="checkbox" class="rounded border-[#2a2a4a] bg-[#0a0a0f] text-[#7c5cfc] focus:ring-[#7c5cfc]" />
@@ -213,11 +223,24 @@ const activeTab = ref<AccountType | 'all'>('all')
 const showAddModal = ref(false)
 const showEditModal = ref(false)
 const editingAccountId = ref<string | null>(null)
+const editingAccountType = ref<AccountType>('expense')
 const editAccount = ref({
   name: '',
   description: '',
   currency: ui.defaultCurrency,
   placeholder: false,
+  parentId: '',
+})
+
+const editParentOptions = computed(() => {
+  if (!editingAccountId.value) return []
+  const excludeIds = new Set(accountStore.getAllDescendantIds(editingAccountId.value))
+  return accountStore.accounts
+    .filter(a => a.type === editingAccountType.value && !excludeIds.has(a.id))
+    .sort((a, b) =>
+      accountStore.getFullPath(a.id, typeLabels.value)
+        .localeCompare(accountStore.getFullPath(b.id, typeLabels.value), undefined, { sensitivity: 'base' })
+    )
 })
 const treeExpandedState = ref(false)
 const treeGeneration = ref(0)
@@ -253,11 +276,13 @@ function openAddModalWithParent(parent: Account) {
 
 function openEditModal(account: Account) {
   editingAccountId.value = account.id
+  editingAccountType.value = account.type
   editAccount.value = {
     name: account.name,
     description: account.description ?? '',
     currency: account.currency,
     placeholder: account.placeholder,
+    parentId: account.parentId ?? '',
   }
   showEditModal.value = true
 }
@@ -269,6 +294,7 @@ async function handleEditAccount() {
     description: editAccount.value.description,
     currency: editAccount.value.currency,
     placeholder: editAccount.value.placeholder,
+    parentId: editAccount.value.parentId || null,
   })
   showEditModal.value = false
   editingAccountId.value = null

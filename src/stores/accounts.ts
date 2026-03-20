@@ -24,6 +24,7 @@ export const useAccountStore = defineStore('accounts', () => {
         const data = await res.json()
         if (data && data.length > 0) {
           accounts.value = data
+          await ensureRootAccounts()
           return
         }
       }
@@ -41,6 +42,25 @@ export const useAccountStore = defineStore('accounts', () => {
         createdAt: new Date().toISOString(),
       }))
       persist()
+    }
+  }
+
+  // Ensures the 5 structural root accounts always exist in memory and the DB.
+  // Called whenever data comes from the API, because roots are never created
+  // through normal user flows and can be missing from the database.
+  async function ensureRootAccounts() {
+    const missing = DEFAULT_ACCOUNTS.filter(r => !accounts.value.some(a => a.id === r.id))
+    if (missing.length === 0) return
+    const toInsert = missing.map(r => ({ ...r, createdAt: new Date().toISOString() }))
+    // Prepend so roots always sit before user accounts in the array
+    accounts.value = [...toInsert, ...accounts.value]
+    // Fire-and-forget: sync them to the DB (already has the specific id so no duplicates)
+    for (const root of missing) {
+      fetch('/api/accounts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(root),
+      }).catch(() => {})
     }
   }
 
