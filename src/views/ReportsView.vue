@@ -164,6 +164,24 @@
         :empty-text="t.reports.noData"
       />
     </template>
+
+    <!-- MONTHLY TRENDS -->
+    <MonthlyTrendsPanel
+      v-if="activeTab === 'trends'"
+      :currency="ui.defaultCurrency"
+    />
+
+    <!-- NET WORTH EVOLUTION -->
+    <EvolutionPanel
+      v-if="activeTab === 'evolution'"
+      :currency="ui.defaultCurrency"
+    />
+
+    <!-- TRIAL BALANCE -->
+    <TrialBalancePanel
+      v-if="activeTab === 'trialbalance'"
+      :currency="ui.defaultCurrency"
+    />
   </div>
 </template>
 
@@ -180,15 +198,21 @@ import {
   Wallet,
   Scale,
   Receipt,
+  BarChart3,
+  LineChart,
+  BookOpen,
 } from 'lucide-vue-next'
 import ReportPanel from '@/components/reports/ReportPanel.vue'
+import MonthlyTrendsPanel from '@/components/reports/MonthlyTrendsPanel.vue'
+import EvolutionPanel from '@/components/reports/EvolutionPanel.vue'
+import TrialBalancePanel from '@/components/reports/TrialBalancePanel.vue'
 import type { ReportItem } from '@/components/reports/ReportPanel.vue'
 
 const accountStore = useAccountStore()
 const ui = useUIStore()
 const { t } = useI18n()
 
-const activeTab = ref<'income' | 'expenses' | 'assets' | 'pnl' | 'networth'>('expenses')
+const activeTab = ref<'income' | 'expenses' | 'assets' | 'pnl' | 'networth' | 'trends' | 'evolution' | 'trialbalance'>('expenses')
 
 const tabs = computed(() => [
   { value: 'income' as const, label: t.value.reports.incomeReport, icon: TrendingUp, color: '#22c55e' },
@@ -196,6 +220,9 @@ const tabs = computed(() => [
   { value: 'assets' as const, label: t.value.reports.assetsReport, icon: Wallet, color: '#3b82f6' },
   { value: 'pnl' as const, label: t.value.reports.profitAndLoss, icon: Receipt, color: '#ec4899' },
   { value: 'networth' as const, label: t.value.reports.netWorth, icon: Scale, color: '#7c5cfc' },
+  { value: 'trends' as const, label: t.value.reports.monthlyTrends, icon: BarChart3, color: '#ec4899' },
+  { value: 'evolution' as const, label: t.value.reports.netWorthEvolution, icon: LineChart, color: '#7c5cfc' },
+  { value: 'trialbalance' as const, label: t.value.reports.trialBalance, icon: BookOpen, color: '#06b6d4' },
 ])
 
 // Data helpers
